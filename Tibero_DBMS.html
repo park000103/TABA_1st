@@ -1,0 +1,1569 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>티베로 DBMS</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="d3dacfc0-9442-400d-ba11-038130e87a89" class="page serif"><header><div class="page-header-icon undefined"><img class="icon" src="https://www.notion.so/icons/chat_lightgray.svg"/></div><h1 class="page-title">티베로 DBMS</h1><p class="page-description"></p></header><div class="page-body"><h1 id="358f0327-8653-4a28-93ca-a0af4ba29e60" class="block-color-pink_background">[ Summary ]</h1><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">DAY 1 - Tibero Architecture</summary><div class="indented"><p id="9a7a2efd-0f18-4704-962c-af0d740db36f" class="">
+</p><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0"><mark class="highlight-purple_background">1. 인스턴스 구조</mark></summary><div class="indented"><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0"><mark class="highlight-teal_background">Tibero 전체 구조</mark></summary><div class="indented"><figure id="af653e46-d644-4c3a-bcbf-0cdf2c8399fd" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled.png"><img style="width:1327px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled.png"/></a></figure><ul id="f764347b-e632-40a3-91e2-4c59b4b191f2" class="bulleted-list"><li style="list-style-type:disc">티베로가 설치가 된 곳엔 티베로 인스턴스, 티베로 데이터베이스가 설치됨</li></ul><ul id="41434e42-64d6-4150-9914-01cc62548fb6" class="bulleted-list"><li style="list-style-type:disc">티베로 binary에서 티베로 인스턴스(여러 process, memory) 실행됨</li></ul><ul id="859b35de-f265-48e9-8f86-acadd41ba05c" class="bulleted-list"><li style="list-style-type:disc">실행파일(tibero binary)가 존재해야 instance 실행함</li></ul><ul id="e8bfeb5a-3e85-4bc7-a350-dabb35d503ca" class="bulleted-list"><li style="list-style-type:disc">tibero instance : db 관리 (하는 역할, 목적)<ul id="0daccee9-65f8-44ee-9010-e67b5d9701fb" class="bulleted-list"><li style="list-style-type:circle">파일 (binary, db file - 두가지 종류) →tibero instance, db 에 초점을 맞춤</li></ul></li></ul><ul id="08a9c3b6-adf3-4db0-849b-fb8182307a71" class="bulleted-list"><li style="list-style-type:disc">tibero server → tibero binary → tibero instance(tibero process로 이루어짐)</li></ul><ul id="95aa4c9a-0e10-4ef8-a0e6-4039a1d3ca26" class="bulleted-list"><li style="list-style-type:disc">tibero instance - tibero database = 1:n 관계<ul id="f11e5ddf-dcd7-4eb6-9aca-2e3d46e515a8" class="bulleted-list"><li style="list-style-type:circle">확장하면 db는 무조건 1개 instance는 여러 개 될 수 있음 → TAC</li></ul><ul id="5764bb71-3d1d-4c25-9a74-f08f9dfa8905" class="bulleted-list"><li style="list-style-type:circle">cluster(여러개의 instance 모아서 씀)하는 이유<ol type="1" id="9159a9b2-df73-4e6a-8909-74e099e96ca2" class="numbered-list" start="1"><li>가용성 : 최대한 다양한 상태를 유지하고자함.<p id="20a80274-0b13-4d87-a1cf-6f7d6c6efb68" class=""> → 하나의 문제가 생겨도 다른 것으로 대체 가능</p></li></ol><ol type="1" id="dff75acd-2acc-4640-8318-6d9869e2bed4" class="numbered-list" start="2"><li>확장성 : 사용자의 입장에서 사용자가 동시에 사용하려고 보니 instance 하나로는 부족하여 사용자가 100명정도 많다면 instance를 늘려 사용</li></ol><p id="100768f2-9a59-404d-aa99-481ea766b14e" class="">→ instance 가 한개일때만 다룸</p></li></ul></li></ul><ul id="a863fa68-c410-4c33-adaa-98fa32c8b6d9" class="bulleted-list"><li style="list-style-type:disc">tibero instance : 사용자의 요청을 받아 데이터 처리해주는 역할을 한다. <ul id="c7acbb0d-f80d-42f9-98ff-e31b8ae255f9" class="bulleted-list"><li style="list-style-type:circle">instance가 연결이 되어있어야함. intrerface라는 연결체 interface driver라는 library file이 있어야 사용자가 전달 tibero binary만들 때 같이 만들어짐 → <mark class="highlight-yellow_background">접속 </mark></li></ul><ul id="67c89d68-0538-49b4-8fef-7754d4549d54" class="bulleted-list"><li style="list-style-type:circle">여러 단계가 있음. </li></ul><ul id="f3ff4f06-ec5b-408f-9022-601737ee2db9" class="bulleted-list"><li style="list-style-type:circle">정해진 언어를 통해서 요청할 수 있음. (instance가 이해할 수 있는 언어 : sql) → <mark class="highlight-yellow_background">sql실행</mark></li></ul><ul id="4fbb55b3-39ef-4e52-a16b-dfc3e8c483d8" class="bulleted-list"><li style="list-style-type:circle">사용자 요청(sql 내용)대로 db 파일 찾아 열고 처리를 하여 사용자에게 응답을 함</li></ul><hr id="2441fb57-0cfa-41f4-bf49-868433c51bf6"/><ul id="297671d9-fb75-4b8b-a1e2-62025fd1a7a3" class="bulleted-list"><li style="list-style-type:circle">whats server(=application server) : 점유율 높은 software server</li></ul><ul id="21c6bb80-6468-4e19-9648-c2cc6fb2bf23" class="bulleted-list"><li style="list-style-type:circle">listener(process) : instance 접속할 때 신호 알려주는 것 → 접속이 들어오면 듣고 있음(접속 중개하는 역할) - 1개만 필요<ul id="f6a07f14-0ae4-4303-905c-18c193edc756" class="bulleted-list"><li style="list-style-type:square">listener한 port 사용자가 알고 있어야함</li></ul><ul id="be71a3f9-0361-416e-aa2a-bb66eb5ecfe7" class="bulleted-list"><li style="list-style-type:square">어떤 IP를 사용하는지 알고 있어야함</li></ul></li></ul><ul id="d74c2251-6336-4b93-882f-e5c7341825f1" class="bulleted-list"><li style="list-style-type:circle">작업 process(thread) : 여러 개 있음 (작업 process 1개당 작업 process 10개 들어있음)<ul id="1d12fbb6-3682-4013-8b42-47cd3f294f4f" class="bulleted-list"><li style="list-style-type:square">사용자가 요청을 하려면 작업 thread와 연결해야함 → 사용자는 여러명이 있음</li></ul><ul id="2fae82be-bdd6-4315-a950-6f7314c19269" class="bulleted-list"><li style="list-style-type:square">일반적인 dbms 동작방식 : 1번의 데이터 요청만 가능 → 또다른 사용자가 요청을 동시다발적으로 할 수도 있음.</li></ul><ul id="007672b3-1ec1-4d3d-822e-8e33d7cbba8e" class="bulleted-list"><li style="list-style-type:square">작업 thread는 서로 영향을 받지 않고 사용자의 요청을 받고 동시에 작업<p id="84be52a9-1c69-46be-b994-4d79e9267bc1" class="">ex) ktx예매, 수강신청</p></li></ul></li></ul><ul id="59803137-ca17-4fba-a7b2-e8394c4b50e4" class="bulleted-list"><li style="list-style-type:circle">공유 memory(성능 빨라짐) : 내가 사용하고 싶은 작업 memory에 있다가 사용할 수 있을 때 사용 <ul id="378d5a56-d215-443d-a553-db79d20fade9" class="bulleted-list"><li style="list-style-type:square">공유 : 사용자 한명이 데이터를 메모리에서 사용했을 때 사용이 끝나고 난 메모리에 남겨진 데이터를 버리지 않고 다른 사용자가 남겨놓은 메모리를 재사용하는 것</li></ul><ul id="17714380-2df8-4fc6-bec3-f7c7dc3e286b" class="bulleted-list"><li style="list-style-type:square">buffer cache : 데이터 모음</li></ul><ul id="70373909-056f-43a6-806b-c25217224ff1" class="bulleted-list"><li style="list-style-type:square">redo log buffer : 데이터 수정 (입력,삭제,수정) → db 변경<p id="cbba07dc-b91d-46f7-a74e-04e387ec64f7" class="">→ 변경이력 데이터 :  또 다른 데이터 (a→a’ 로 수정한다면 별도로 저장)</p><p id="ef0fe7dc-4303-476e-93e1-505614b18215" class="">→ 여러 redo log 변경</p><p id="143b0a48-22c0-44f4-a663-dec530b984c0" class="">→ redo log가 발생할때마다 즉시 파일에 쓰여짐 → 성능 나쁨<div class="indented"><p id="bacbe7b1-8bb9-488d-9bc4-ff01c79fb575" class="">따라서, redo log buffer가 한꺼번에 처리해줌</p></div></p></li></ul><ul id="097257b1-a8a4-45df-bcb8-96065eeeaed2" class="bulleted-list"><li style="list-style-type:square">shared cache : sql 저장됨 (사용자와 연결되는 언어)<ul id="3260d206-8b0f-44f3-9bcf-bc11272c3680" class="bulleted-list"><li style="list-style-type:disc">실행계획 - thread가 개별적으로 sql을 처리하며 만들어짐</li></ul><ul id="025dd744-4500-4b44-bb66-9eefdc8c0df4" class="bulleted-list"><li style="list-style-type:disc">sql을 이용하여 실행 계획을 세움.</li></ul><ul id="5a9b846a-8c68-4f78-b20e-fb6caffe063a" class="bulleted-list"><li style="list-style-type:disc">CPU를 이용하여 실행 계획을 세우기 시간이 오래걸림.<p id="a7d9dcdf-e952-46d3-b480-e20e24e3470f" class="">→ 지난번 썼던 sql이 필요한다면 가져다쓰면됨.</p></li></ul><ul id="fb5521ed-ccd1-49ba-ad86-36afef97d0d6" class="bulleted-list"><li style="list-style-type:disc">저장을 하고있다가 실행계획을 다시 만드는 것을 최대한 줄여줌.</li></ul></li></ul></li></ul></li></ul></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0"><mark class="highlight-teal_background">Tibero Process</mark></summary><div class="indented"><ul id="e61de7a6-4835-4788-85d4-37866f717a36" class="bulleted-list"><li style="list-style-type:disc">Tibero 프로세스 구조<figure id="c2a5781b-9e13-46ed-ace5-c4cf76d2ed4c" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%201.png"><img style="width:1142px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%201.png"/></a></figure><ul id="919b8b35-ac71-4704-95c3-d3ad45d7cca7" class="bulleted-list"><li style="list-style-type:circle">client가 접속을 하는 5가지 접속 정보 → 없이는 query 실행 불가능<ol type="1" id="3db48907-eaad-4c4e-8d3c-de7d8d7b1fbe" class="numbered-list" start="1"><li>IP 정보 : 서버들은 interface card 여러개가 있음 각각의 network card에는 IP가 있음 - IP를 알아야 접속을 할 수 있음 → 접속 정보 보냄</li></ol><ol type="1" id="8e899b45-e609-4887-a7ae-ba75bc7f4a62" class="numbered-list" start="2"><li>port 정보 : listening 하는 port - server 전체에서 unique한 port → listener 접속 process 할당</li></ol><ol type="1" id="089139bf-b31c-4ead-873b-289b3e900e19" class="numbered-list" start="3"><li>db name 정보 : 데이터를 담고 있는 file에 붙여진 이름 - 설치과정에서 file이 만들어짐 -  tibero에 접속하는 사용자가 알아야하는 정보 → thread를 할당(1개의 control thread가)</li></ol><ol type="1" id="755e19d2-5d9f-4575-af14-b323c9547914" class="numbered-list" start="4"><li>user password 정보 - 데이터를 사용하는 사용자들의 이름 → thread와 client 간의 연결 (user명 확인 과정 - table에 들어있는 정보 - thread는 db 접근 가능)-thread가 password이 맞는지 db에 접근하여 table에서 찾음</li></ol><p id="870088cb-b7e5-4c54-9f73-250c9a7da656" class="">
+</p></li></ul></li></ul><ul id="97ba4e74-20df-43b8-a713-1434a11411a2" class="bulleted-list"><li style="list-style-type:disc">워커프로세스<ul id="fae92a12-d940-46e4-a235-3abd7cd979f6" class="bulleted-list"><li style="list-style-type:circle">사용자와 대면 : forground worker process</li></ul><ul id="70255851-874a-41a2-bd3b-4dd69eda9cff" class="bulleted-list"><li style="list-style-type:circle">사용자와 직접 대면하지 않음 : background worker process : 작업 보호 - 안전하게 항상 실행이 되는데 문제가 없도록 할 수 있음  - 외부말고 내부에서 작업을 보호함</li></ul><p id="b23c2e91-1a7c-44a5-a640-a2194158ca1a" class="">
+</p><ul id="6a4cc48b-b555-4c4a-9cd1-822d1ce27b36" class="bulleted-list"><li style="list-style-type:circle">forground : 사용자가 접속했을 때 접속대상이 되는 process</li></ul><ul id="227f1442-a1d1-458c-b51c-270d76dc821c" class="bulleted-list"><li style="list-style-type:circle">background : 사용자가 접속 요청을 했을 때 listener가 경계하지 않아 접속대상이 되지 않은 process</li></ul><p id="70d128db-aa18-4d88-98f8-db1fa1929f06" class="">
+</p><p id="8f1ed4e5-cf69-463b-9ed8-2717b1b145fb" class="">
+</p></li></ul></div></details><p id="781a2d78-854f-41ef-a262-5c18e727dacc" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0"><mark class="highlight-purple_background">2. 데이터베이스 구조</mark></summary><div class="indented"><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0"><mark class="highlight-teal_background">Tibero database 저장소 구조</mark></summary><div class="indented"><figure id="24ae4db9-6ded-40da-8510-885de821fbb7" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%202.png"><img style="width:1382px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%202.png"/></a></figure><ul id="dd3a7816-8d58-43c9-9f74-72613ab26091" class="bulleted-list"><li style="list-style-type:disc">backup : db 파일들을 복사하는 것 ( 묶음 : set)</li></ul><ul id="3a33500b-9b56-47c1-9b22-ec63463fa351" class="bulleted-list"><li style="list-style-type:disc">backup 저장소 : backup 장비 구매 - db server 장비</li></ul><ul id="cb074498-5b2b-48c3-b992-dd617aa90b7c" class="bulleted-list"><li style="list-style-type:disc">db server 설치하고 운영하려면 file들을 운영하는 장소와 나열할 곳 필요</li></ul><p id="7817848f-3e01-41b9-9c93-3269eab9dfe2" class="">
+</p><ul id="0e071000-7afe-4d86-baec-a91e10d26e47" class="bulleted-list"><li style="list-style-type:disc">논리 저장구조(=table space)<ul id="b46ee30c-4e59-4cbe-b8aa-3e1d8f534d68" class="bulleted-list"><li style="list-style-type:circle">worker process가 있어서 instance에 있는 sql을 던져 어떤 table에 있는지 알려주는 것 (논리 저장구조- 데이터 파일 = 1:N(N은 1이상) 관계) - table space가 있으면 적어도 한개의 data file이 존재해야함</li></ul></li></ul><ul id="c4e06d4c-770a-46de-9ff6-a93790d2b9bd" class="bulleted-list"><li style="list-style-type:disc">물리 저장구조<ul id="a4621f0f-d6d9-4fd7-b011-81187fdeebd2" class="bulleted-list"><li style="list-style-type:circle">sql 실행하면 물리 저장 구조 만들어짐</li></ul><ul id="99c168da-ceb1-42e1-bd1b-282a06f3a351" class="bulleted-list"><li style="list-style-type:circle">sql을 통해 처음 db 자체 만들어짐 (tibero 처음 설치할 때 sql 명령어 보내면 만들어짐)</li></ul></li></ul></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0"><mark class="highlight-teal_background">Tibero database 파일</mark></summary><div class="indented"><figure id="e17f0a3b-cf5e-478b-bd8e-974326333a27" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%203.png"><img style="width:1396px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%203.png"/></a></figure><ul id="a99287b8-4f39-4493-bf9f-cef935c4fb1d" class="bulleted-list"><li style="list-style-type:disc">설치하는 과정에서 위에 파일 만들어짐</li></ul><ul id="8a5c0b6d-0c6b-4390-937b-5f93dcbd0d0b" class="bulleted-list"><li style="list-style-type:disc">3가지 종류의 파일의 차이점<ul id="22f20c7d-156d-4dff-930c-518919d94b61" class="bulleted-list"><li style="list-style-type:circle">data file - 데이터 저장<ul id="a61fb936-537b-4ea3-8d08-3f132e8690cf" class="bulleted-list"><li style="list-style-type:square">worker thread(데이터 접근하기 위해) data file에 접근</li></ul><ul id="610b05c5-e919-482c-8c54-9d5756daca19" class="bulleted-list"><li style="list-style-type:square">데이터에 접근하려면 정보가 어디에 있는지 알아야함 - control file부터 접근되어야함.</li></ul></li></ul><ul id="63459c9e-bce3-4434-adb4-b84a9a3cfca9" class="bulleted-list"><li style="list-style-type:circle">redolog file : redo log 저장</li></ul><ul id="f40d100c-05f0-4343-9890-3aae13ffca3b" class="bulleted-list"><li style="list-style-type:circle">control file : 물리적인 저장구조(파일들의 목록, 정보)와 물리적인 상태구조 담고 있음</li></ul></li></ul><ul id="6a5cb900-b140-46f9-95b4-7fef355c9d83" class="bulleted-list"><li style="list-style-type:disc">접근 순서<p id="0e91ce05-0d86-4589-bb32-c1d38aff1236" class="">→ control file(기준/data file list 보고) → data file(목록에 쓰여있는 file만 접근/control file에  없는 파일이라고 있어도 없는 파일 취급)</p></li></ul></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0"><mark class="highlight-teal_background">Tibero Database 구조 (물리 저장 구조)</mark></summary><div class="indented"><ul id="0c57297e-a517-4303-ae4e-a735e95dcfb4" class="bulleted-list"><li style="list-style-type:disc">데이터 파일 헤더<ul id="57b32c5c-ed3c-4005-97eb-a7aa618918bb" class="bulleted-list"><li style="list-style-type:circle">check point : data file에 변경(db 변경)을 일으키는 작업 -TSN</li></ul><ul id="d27bf6d5-ffff-4275-a83f-ba83fe745bb9" class="bulleted-list"><li style="list-style-type:circle">사용 공간 : 가장 작은 공간(데이터 불러오는 공간) </li></ul><ul id="82f772bf-a1b8-4660-9f7a-8f48ec0f7c6b" class="bulleted-list"><li style="list-style-type:circle">데이터를 누군가 사용하고자 할 때 데이터파일의 어떤 부분을 떼어내어 사용하라고 요청</li></ul></li></ul><ul id="69d26bd5-ce11-4753-ba41-1d57880bae87" class="bulleted-list"><li style="list-style-type:disc">공간 활용 방법<ul id="8b1ba0db-60ed-43b7-b50a-cf979608172c" class="bulleted-list"><li style="list-style-type:circle">데이터 파일 추가 - 파일 하나 resize - 기존의 사용하는 공간 정리</li></ul><figure id="f10fe74e-61c4-4431-8510-c58cf5e5eefd" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%204.png"><img style="width:1353px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%204.png"/></a></figure><p id="639b0e29-cf5d-4b4e-b897-099a0f84fd26" class="">
+</p></li></ul></div></details><p id="12e04140-f026-4ad9-8310-04bc2c0f1111" class="">
+</p></div></details></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">DAY 2 - Tibero installation_1</summary><div class="indented"><ul id="01b17374-3860-4b5d-9d18-e1d9d74622f3" class="bulleted-list"><li style="list-style-type:disc">instance 설치할 때 JDK 무조건 필요한건 아님</li></ul><ul id="88e07096-b811-485d-8ceb-0942b2d53b35" class="bulleted-list"><li style="list-style-type:disc">database(datafile, redologfile,controlfile)</li></ul><ul id="deb767e8-7f03-41b3-af6d-24a567a1119e" class="bulleted-list"><li style="list-style-type:disc">설치 준비사항<ul id="a82c8466-020b-4284-ba47-42fa42e36177" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-red_background">Tibero 환경변수</mark></li></ul><ul id="0e3db02b-4b8d-4291-9edb-e3aad7ede29a" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-red_background">Tibero 파라미터</mark></li></ul><ul id="0da53a1d-2c1b-437f-9bcd-1ac6986e340f" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-red_background">Tibero 데이터베이스 생성항목 (데이터 문장)</mark></li></ul></li></ul><p id="0a096e31-38cb-40a7-a6cb-17aea0033818" class="">
+</p><p id="b0fa85ba-659c-4ace-90b9-60b4a2326943" class="">&lt;파일 보기&gt;</p><figure id="f389583c-7528-42d0-b6bb-39bbdf038cd3" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%205.png"><img style="width:271px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%205.png"/></a></figure><p id="c66810fb-a714-48c7-8b45-7d93082ddf5f" class="">&lt;파일 조회&gt;</p><figure id="aa62ffbf-8004-43e6-9db9-ff68ea8c1640" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%206.png"><img style="width:197px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%206.png"/></a></figure><p id="8fe55b07-275c-441a-ab15-664d64064aca" class="">&lt;파일 tibero에 복사하기&gt;</p><figure id="1fe2c893-bce2-4b93-a45a-42b78bc59a6b" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%207.png"><img style="width:332px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%207.png"/></a></figure><p id="937f45c2-04de-41fa-87fc-8c03330d8875" class="">
+</p><p id="da40fb95-2a6e-4766-8ed9-0da8ce1ef38b" class="">&lt;설치 전 3가지 환경변수 설정&gt;</p><p id="97d83581-e909-4497-a5c7-9fb81e093add" class="">######## TIBERO ENV ########<br/>export TB_HOME=/tibero/tibero6 <br/><mark class="highlight-red_background">#binary정보</mark><br/>export TB_SID=tibero<br/><mark class="highlight-pink_background"> #instance 이름</mark><br/>export TB_PROF_DIR=$TB_HOME/bin/prof<br/>export PATH=.:$TB_HOME/bin:$TB_HOME/client/bin:~/tbinary/monitor:$PATH<br/>export LD_LIBRARY_PATH=$TB_HOME/lib:$TB_HOME/client/lib:$LD_LIBRARY_PATH<br/>export SHLIB_PATH=$LD_LIBRACDRY_PATH:$SHLIB_PATH<br/>export LIBPATH=$LD_LIBRARY_PATH:$LIBPATH<br/></p><p id="79e02c31-a52d-4099-892a-ff68952b2973" class="">######## TIBERO alias ########<br/>alias tbhome=&#x27;cd $TB_HOME&#x27;<br/>alias tbbin=&#x27;cd $TB_HOME/bin&#x27;<br/>alias tblog=&#x27;cd $TB_HOME/instance/$TB_SID/log&#x27;<br/>alias tbcfg=&#x27;cd $TB_HOME/config&#x27;<br/>alias tbcfgv=&#x27;vi $TB_HOME/config/$TB_SID.tip&#x27;<br/>alias tbcli=&#x27;cd ${TB_HOME}/client/config&#x27;<br/>alias tbcliv=&#x27;vi ${TB_HOME}/client/config/tbdsn.tbr&#x27;<br/>alias tbcliv=&#x27;vi ${TB_HOME}/client/config/tbnet_alias.tbr&#x27;<br/>alias tbdata=&#x27;cd $TB_HOME/tbdata&#x27;<br/>alias tbi=&#x27;cd ~/tbinary&#x27;<br/>alias clean=&#x27;tbdown clean&#x27;<br/>alias dba=&#x27;tbsql sys/tibero&#x27;<br/>alias tm=&#x27;cd ~/tbinary/monitor;monitor;cd -&#x27;<br/></p><p id="065b54c2-f937-4cde-be54-d40061264bde" class="">
+</p><p id="30783291-4439-4a8a-a8d9-3d32b7d798ea" class="">&lt;설치 : 사용자 환경변수 설정&gt;</p><ul id="46eacf57-6a09-4fcc-9490-cfee7947dc37" class="bulleted-list"><li style="list-style-type:disc">파일 : /home/tibero/.bash_profile</li></ul><ul id="586fc1ad-d674-4c1a-a814-337ed26d82b1" class="bulleted-list"><li style="list-style-type:disc">준비한 내용을 위의 파일에 추가함.</li></ul><p id="a7632f3c-d811-40cd-92d6-2de2e28c585c" class="">
+</p><h3 id="b2877f58-83d6-49a3-b557-e2d92a405fd9" class=""><mark class="highlight-orange_background">[ 20220927_노트 .txt ]</mark></h3><p id="a40a7d86-ae58-4d6c-82bf-697da3281c0c" class="">&lt;IP관련 설정, 수동으로 변경하기&gt;<br/>제어판\모든 제어판 항목\네트워크 및 공유 센터<br/>-&gt; 어댑터설정변경 -&gt; 이더넷-&gt; 속성-&gt; 이더넷속성 -&gt;<br/>-&gt; 인터넷 프로토콜 버전4(TCP/IPv4)-&gt; 속성<br/>에서 아래(ipconfig)에서 확인한 값을 입력하여 설정함.<br/></p><p id="74b15d00-af51-44b5-8d52-140cc834eb01" class="">
+</p><p id="16b44e5c-42f4-4e67-b567-d44aeacb7d78" class="">cmd -&gt;<br/>ipconfig -&gt;<br/>이더넷 어댑터 이더넷<br/>무선 LAN 어댑터 WIFI<br/></p><p id="31e4b3cf-f9e9-4a9c-bcf0-0d574837c679" class="">
+</p><p id="bdd7bf62-373f-4f16-aaef-f343b57379c8" class="">ipconfig 다시 실행하여 출력내용확인<br/>웹브라우저에서 인터넷 접근 잘되는지 확인<br/></p><p id="81a48db2-2b9d-4706-9169-93bc94c66992" class="">
+</p><p id="532f0815-df34-46c7-8b6c-047590d423e6" class="">&lt; virtualbox 설치&gt;</p><p id="9bfda6c8-d1e5-4797-9048-b366033edfca" class="">&lt; virtualbox 에서 가상시스템 가져오기 &gt;</p><ul id="9d9e4166-14d8-45b6-b2f7-def0efb508a1" class="bulleted-list"><li style="list-style-type:disc">머신기본폴더 ==&gt; C:\_TIBERO_USB\VM</li></ul><ul id="49fdfdbb-4dc5-4e7d-97dd-78663e70fb20" class="bulleted-list"><li style="list-style-type:disc">MAC주소정책 ==&gt; 모든 네트워크 어댑터 MAC 주소 포함</li></ul><ul id="20acb8bc-01f5-40ee-9f8a-435580398cd0" class="bulleted-list"><li style="list-style-type:disc">가져오기 이후<ol type="1" id="76214b43-2b2c-497b-92f5-7aec930264cd" class="numbered-list" start="1"><li>설정-&gt; 네트워크 -&gt; 어댑터2 -&gt; 확인</li></ol><ol type="1" id="aa7857b2-deb7-4f5f-80d3-3a49706266d5" class="numbered-list" start="2"><li>설정-&gt; 공유폴더-&gt; C:\_TIBERO_USB\s 설정하기</li></ol><ol type="1" id="5c038a29-9f16-48e6-a767-cba2b60ca8f3" class="numbered-list" start="3"><li>설정-&gt;네트워크 -&gt; 어댑터1-&gt;고급 -&gt; 포트 포워딩<br/>-&gt; 위에서ipconfig 로 확인한 ip를 &quot;호스트ip&quot; 에 넣기<br/></li></ol><ol type="1" id="21251902-44fb-4d25-8968-93cda378809e" class="numbered-list" start="4"><li>T1 -&gt; 스냅샷 -&gt; 현재상태 -&gt; 마우스오른쪽 버튼-&gt; 찍기<br/>-&gt; 가상머신의 스냅샷 찍기 -&gt; 확인<br/></li></ol></li></ul><ul id="efc525cb-0b52-4f05-b0a4-fd3f2f3dbffa" class="bulleted-list"><li style="list-style-type:disc">시작 : T1 머신 선택하고, 시작 버튼 클릭</li></ul><p id="cac979d3-96ca-4436-96a1-58b76c98d401" class="">
+</p><p id="2082f5e8-97ee-42aa-8093-4ca418f9523f" class="">&lt; Putty 설치 및 리눅스(T1머신) 접속&gt;</p><p id="c023b279-e69d-4ed5-a45a-56c107524950" class="">IP : 192.168.56.241  사용하여  LOCAL_T1 접속정보 등록</p><p id="2ef70af2-a26a-47c5-bf57-d35b93d17309" class="">리눅스 로그인시 tibero 유저 사용(패스워드: tibero)</p><p id="66805614-55d9-4ed4-b920-e9074baaf57b" class="">
+</p><p id="3e65820c-f03a-4650-9a1e-950fa9ec8213" class="">&lt; FileZilla 설치 및 실행 &gt;</p><ul id="d019fd93-c624-4c4a-a496-5a9766aca6c2" class="bulleted-list"><li style="list-style-type:disc">설치하고, 공유폴더접속(빠른 연결 버튼)을 함<p id="6a98ff86-6bf9-47ed-90f8-c620c66aaa18" class="">호스트   : 172.23.14.72<br/>사용자명: edu<br/>비밀번호:edu<br/>포트: 21<br/></p></li></ul><p id="6c44590c-6a9d-453f-bf5c-001f6b7d3927" class="">
+</p><p id="2eb4f89e-8803-4f5e-ad83-426cecccacda" class="">&lt; 티베로 설치를 위한 파일 리눅스에 넣기 &gt;</p><ul id="37df38ff-ed12-435c-bd67-7425f203bc7b" class="bulleted-list"><li style="list-style-type:disc">윈도우에서 파일을 넣기 C:\_TIBERO_USB\s</li></ul><ul id="f383a011-3002-4f17-a805-38d702c80203" class="bulleted-list"><li style="list-style-type:disc">리눅스에서 파일을 가져오기 /tibero/s</li></ul><p id="7fcbafaf-b586-4546-9ccf-89aa1e9e97f9" class="">
+</p><p id="8cb7d6c8-9269-4f82-bcf2-b9dfe1b79c08" class="">&lt; 티베로 설치를 위해 설치 경로로 파일 가져오기 &gt;</p><ul id="e20742bd-43b1-45de-ae7c-a26868f13955" class="bulleted-list"><li style="list-style-type:disc">티베로 설치 위치 : /tibero</li></ul><ul id="76347d81-8d6f-4277-ac6f-f3f272d85f59" class="bulleted-list"><li style="list-style-type:disc">파일 복사하기<br/>cp /tibero/s/* /tibero<br/></li></ul><ul id="761e7e34-8d99-4276-92c8-c7d736db93f9" class="bulleted-list"><li style="list-style-type:disc">파일 조회<br/>ls -l /tibero<br/></li></ul><p id="c256e4a5-14eb-4256-8382-64a6fcd66739" class="">
+</p><p id="07bc6650-5d6c-4343-9a05-7ac428610354" class="">&lt; 티베로 설치전에 3가지 내용 준비 &gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2d8f13e7-ceec-41b1-8022-627806fb26e7" class="code"><code class="language-JavaScript">######## TIBERO ENV ########
+export TB_HOME=/tibero/tibero6
+export TB_SID=tibero
+export PATH=.:$TB_HOME/bin:$TB_HOME/client/bin:~/tbinary/monitor:$PATH
+export LD_LIBRARY_PATH=$TB_HOME/lib:$TB_HOME/client/lib:$LD_LIBRARY_PATH</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2d6bcb68-3706-406f-9b1b-5243238ffebf" class="code"><code class="language-JavaScript">DB_NAME=tibero
+LISTENER_PORT=8629
+CONTROL_FILES=&quot;/tibero/tbdata/tibero/c1.ctl&quot;,&quot;/tibero/tbdata/tibero/c2.ctl&quot;
+DB_CREATE_FILE_DEST=/tibero/tbdata/tibero
+LOG_ARCHIVE_DEST=/tibero/tbdata/tibero/arch
+MAX_SESSION_COUNT=20
+TOTAL_SHM_SIZE=600M
+MEMORY_TARGET=1G</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="704a0d5d-c5bc-47df-9a24-ccb01a6f9bc6" class="code"><code class="language-SQL">SET ECHO ON
+CREATE DATABASE
+USER sys IDENTIFIED BY tibero
+MAXDATAFILES 256
+CHARACTER SET UTF8
+NATIONAL CHARACTER SET UTF8
+LOGFILE
+	GROUP 0 (
+	&#x27;/tibero/tbdata/tibero/redo1/log01.log&#x27;,
+	&#x27;/tibero/tbdata/tibero/redo2/log02.log&#x27;) SIZE 25M,
+	GROUP 1 (
+	&#x27;/tibero/tbdata/tibero/redo1/log11.log&#x27;,
+	&#x27;/tibero/tbdata/tibero/redo2/log12.log&#x27;) SIZE 25M,
+	GROUP 2 (
+	&#x27;/tibero/tbdata/tibero/redo1/log21.log&#x27;,
+	&#x27;/tibero/tbdata/tibero/redo2/log22.log&#x27;) SIZE 25M,
+	GROUP 3 (
+	&#x27;/tibero/tbdata/tibero/redo1/log31.log&#x27;,
+	&#x27;/tibero/tbdata/tibero/redo2/log32.log&#x27;) SIZE 25M,
+	GROUP 4 (
+	&#x27;/tibero/tbdata/tibero/redo1/log41.log&#x27;,
+	&#x27;/tibero/tbdata/tibero/redo2/log42.log&#x27;) SIZE 25M
+MAXLOGFILES 100
+MAXLOGMEMBERS 2
+ARCHIVELOG
+	DATAFILE &#x27;/tibero/tbdata/tibero/system001.dtf&#x27; SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+DEFAULT TEMPORARY TABLESPACE TEMP
+	TEMPFILE &#x27;/tibero/tbdata/tibero/temp001.dtf&#x27; SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+	EXTENT MANAGEMENT LOCAL AUTOALLOCATE
+UNDO TABLESPACE UNDO
+	DATAFILE &#x27;/tibero/tbdata/tibero/undo001.dtf&#x27; SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+	EXTENT MANAGEMENT LOCAL UNIFORM SIZE 128k
+DEFAULT TABLESPACE USR
+	DATAFILE &#x27;/tibero/tbdata/tibero/usr001.dtf&#x27; SIZE 100m
+	AUTOEXTEND ON NEXT 64m MAXSIZE 3G
+SYSSUB
+	DATAFILE &#x27;/tibero/tbdata/tibero/syssub001.dtf&#x27; SIZE 380m
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G ;</code></pre><p id="aba750a6-0779-46f8-b18f-7d5959ce34dc" class="">&lt; 설치 : 사용자 환경변수 설정 &gt;</p><ul id="09f3c36f-8a51-4c99-9a77-2958432d3d0b" class="bulleted-list"><li style="list-style-type:disc">파일 : /home/tibero/.bash_profile</li></ul><ul id="3e8ea42d-0d02-4d2f-adcb-de2659c0c054" class="bulleted-list"><li style="list-style-type:disc">준비한 내용을 위의 파일에 추가함<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a46a002b-730e-4935-bea8-404ab902f3e5" class="code"><code class="language-SQL">vi /home/tibero/.bash_profile</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4d975acc-cf50-4ed6-8db4-59ccd1d60481" class="code"><code class="language-SQL">cat /home/tibero/.bash_profile</code></pre></li></ul><p id="7ffd0e21-6c72-42b5-b403-1c6f973d2794" class="">&lt; 환경변수 적용 &gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ec20e930-661e-4a56-be72-2f298628fdb5" class="code"><code class="language-SQL">source ~/.bash_profile</code></pre><p id="8c416e8d-9999-4c26-adb2-47e4e61d3417" class="">
+</p><p id="d591e5e6-9c38-4317-ba7b-5d2d9cda9490" class="">&lt;환경변수 확인&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4d0f8c05-e13f-4df2-bdc2-74d78e37b214" class="code"><code class="language-SQL">echo $TB_SID
+echo $TB_HOME</code></pre><p id="9c7447b0-e0fb-4e87-acc4-0ca77a44d42e" class="">
+</p><p id="1a640a2b-661f-4161-86cc-93375893c4a1" class="">&lt; 바이너리 설치(압축 해제)&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3a263220-980b-4122-bce0-945cb4e7a997" class="code"><code class="language-SQL">cd /tibero
+tar -xvzf  tibero6-bin-*</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2784a4cf-6ed3-4f21-8d8d-06fcfbc030f8" class="code"><code class="language-SQL">ls -al   tibero6</code></pre><p id="aa474dc4-8be7-4a02-9467-0fa025c21792" class="">
+</p><p id="a654800d-b7fc-4397-99a3-ec82c67952cf" class="">&lt; 라이센스 파일 넣기 &gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ca62e194-f11a-40db-b4d0-21db5833fa6e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">  cp /tibero/license.xml    /tibero/tibero6/license</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9ce6b019-a39f-4cd2-92a9-f8819101b508" class="code"><code class="language-JavaScript">ls -al  /tibero/tibero6/license/license.xml</code></pre><p id="e77ce229-f70e-4070-9752-a2c25b97b195" class="">&lt;초기 환경파일 생성&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ed2350d4-7606-4191-99f5-64ce980fcac6" class="code"><code class="language-JavaScript">cd $TB_HOME/config</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b040b82d-5885-404e-8bf9-8a4163fff4a2" class="code"><code class="language-SQL">./gen_tip.sh</code></pre><p id="2688583f-1831-4c76-affb-e8d5c45605d5" class="">&lt;Tibero 파라미터 파일 수정&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ae54bdde-98a1-4b3c-9118-1f0c416a5c97" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">vi tibero.tip
+
+cat tibero.tip</code></pre><p id="bb57c85b-d540-41d6-9081-886ffe9bbf89" class="">&lt;Network 설정 파일 (tbdsn.tbr) 수정&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e9327c05-e714-41ba-8548-05cff2ce0802" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"> vi $TB_HOME/client/config/tbdsn.tbr
+
+ cat $TB_HOME/client/config/tbdsn.tbr</code></pre><p id="54aab203-9254-4d6b-9438-166b0557e4f3" class="">&lt; 티베로 인스턴스 NOMOUNT 모드로 기동 &gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c3ce99f4-f6c0-4921-b79e-c9b9e2824f33" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">tbboot nomount</code></pre><p id="14206940-8d36-41b4-83ee-d037d6619eed" class="">&lt; tbsql 이용하여 인스턴스 접속&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4b306c5b-3fb8-4e85-a4d7-e2b38e00871b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">tbsql sys/tibero</code></pre><p id="ad0634d8-6b15-442e-a632-119443549b20" class="">&lt; Database 생성 쿼리 실행 &gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="30b89e23-905a-4419-bcfe-26db7a9fcc56" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">   - 직접 실행해도 되지만, 파일에 담아서 실행하기~
+
+  vi  /tibero/credb.sql
+  cat /tibero/credb.sql
+
+- 파일에 담기 쿼리 실행
+
+  tbsql sys/tibero
+
+  @/tibero/credb.sql
+</code></pre><p id="81b5b2f4-7303-4f3a-95be-f9663cbcdf5f" class="">&lt; 티베로 인스턴스 normal 모드로 시작 &gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f0d3d1c1-5c39-4c71-ad0b-293d03725c6b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">     tbboot</code></pre><p id="ca798bc6-8080-453f-801e-77a013ae1e06" class="">&lt; Data Dictionary 및 system 패키지 생성 &gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="edd534ab-bac0-4c96-82f3-f01d5b61c0dd" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"> cd $TB_HOME/scripts
+
+ sh system.sh -p1 tibero -p2 syscat -a1 y -a2 y -a3 y -a4 y</code></pre><p id="1169ba51-4cbd-4b7b-a705-3df86787d6be" class="">&lt; 인스턴스 시작 종료 &gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e6981630-e35d-4e64-86c2-f9ef3ce8c752" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">    tbboot
+
+    tbdown immediate</code></pre><p id="999e13ec-357c-4086-bc8d-8cadced84979" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">DAY 3 - Tibero installation_2</summary><div class="indented"><p id="ec1bbb48-2e73-484d-ad37-ad120d813cb8" class="">&lt;설치 조건 작성하고, 조건에 맞게 설치하기&gt;</p><ol type="1" id="853cf03e-4aca-4cd6-a3d6-91590b7f043d" class="numbered-list" start="1"><li>티베로 바이너리 위치 ($TB_HOME 환경변수 값)</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9d63e7fe-b208-4529-a3e5-fa985cdf2ffb" class="code"><code class="language-SQL">echo $TB_SID
+echo $TB_HOME
+
+DESC V$DATABASE</code></pre><p id="5ff2e7ad-1035-42d7-bf53-7609125bc056" class="">→ /tibero/0928/tibero6</p><ol type="1" id="7fd09813-7a21-454c-92d1-5a8c739f5b12" class="numbered-list" start="2"><li>티베로 인스턴스 이름 ($TB_SID 환경변수 값) </li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c12ae88d-c885-4406-9ba4-f78cc0496557" class="code"><code class="language-SQL">DESC V$INSTANCE
+SELECT INSTANCE_NAME FROM V$INSTANCE;</code></pre><p id="9c01c74b-fdb5-46be-a38f-d0f55b284df8" class="">→ t0928</p><ol type="1" id="d65f5531-25f9-4524-addf-ae3ac8518920" class="numbered-list" start="3"><li>데이터베이스 이름 (parameter file 에서 정의) </li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b54c40f7-253e-4fc0-b876-984e3e733e07" class="code"><code class="language-SQL">SELECT DB_NAME FROM V$INSTANCE;
+SELECT NAME FROM V$DATABASE;</code></pre><p id="8cb84d09-fba9-4f08-b978-03cbb2721a72" class="">→ t0928db</p><ol type="1" id="efdbd7fd-15a6-4700-a3a3-2e87ad836570" class="numbered-list" start="4"><li>리스너 포트 (서비스 포트) - (parameter file에서 정의) </li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="136276d3-f2cc-4ae1-92e1-118bb18a40e6" class="code"><code class="language-SQL">SELECT VALUE FROM V$PARAMETERS WHERE NAME=’LISTENER_PORT’</code></pre><ul id="b026d8fb-6f19-4c3a-a89c-eb4c3142328b" class="bulleted-list"><li style="list-style-type:disc">사용자들이 접속할 때 필요한 port</li></ul><ul id="6fafb9f5-2307-470d-8280-2917c437721b" class="bulleted-list"><li style="list-style-type:disc">사용자가 접근할 때 데이터베이스를 위한 서비스<p id="553444ce-73bf-42c1-86e0-b5f6c07f33c2" class="">→ 9629</p></li></ul><ol type="1" id="df6e1bb9-6a34-4190-8e83-1e1cfb78189e" class="numbered-list" start="5"><li>기본 캐릭터셋 (DBMS CHARACTER SET) - (create database에서 정의)</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d0836659-85bb-4e14-989b-98547feddb26" class="code"><code class="language-SQL">SELECT VALUE FROM DATABASE_PROPERTIES WHERE NAME=&#x27;NLS_CHARATERSET&#x27;;</code></pre><ul id="68725fd0-6bb8-4183-adc1-1562e69dccd1" class="bulleted-list"><li style="list-style-type:disc">데이터베이스에 default 값으로 사용할 문자 집합</li></ul><p id="ba8fed9b-96ee-4124-b7e1-ca2153ef5ede" class="">→ UTF8</p><ol type="1" id="0b2e99c3-a844-477c-a7ee-3577b56306bd" class="numbered-list" start="6"><li>Redo log SIZE - (개당 각각의 크기) - (create database에서 정의)</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aa6edf68-8cb2-4c78-b112-34e5297bde34" class="code"><code class="language-JavaScript">SELECT AVG(BYTES)/1024/1024 FROM V$LOG;</code></pre><p id="447afc50-955a-44e1-b5eb-f5b51fed5dd2" class="">→ 25MB</p><ol type="1" id="7220e03e-1319-4457-bf9b-3ae91e28f494" class="numbered-list" start="7"><li>Redo log group 개수 - (최소 두개)</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="02c4508a-16a2-4d58-bd44-7d2b586c4720" class="code"><code class="language-SQL">SELECT GROUP#, BYTES/1024/1024 FROM V$LOG;
+SELECT COUNT(*) FROM V$LOG;</code></pre><p id="528d3d5b-b9ea-4945-ad72-d90bda814919" class="">→ 5</p><ol type="1" id="402fb956-1aaa-4c59-a49a-2fb6f4af40af" class="numbered-list" start="8"><li>Redo log 그룹당 멤버갯수 - (그룹옆에 또다른 멤버 나열 가능)<p id="69c940ff-8aca-4a2f-ac2c-d01f1f0b576b" class="">→ 2</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e98b2b03-7b03-4ea2-9446-085bd7f58a58" class="code"><code class="language-SQL">SELECT AVG(MEMBERS) FROM V$LOG;</code></pre><ol type="1" id="a97c61ec-058f-4641-98e6-881cb3565de7" class="numbered-list" start="9"><li>Redo log 멤버(파일) 경로<p id="03924fc7-a3b3-46a2-b0be-35f781a26903" class="">→ 멤버1 : /tibero/0928/dbs/redo1</p><p id="3cead7e4-efa1-4da5-ad41-007dc4cdca3c" class="">→ 멤버2 : /tibero/0928/dbs/redo2</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="74cfdbaf-f8ff-4504-a15c-bb6fe5207677" class="code"><code class="language-SQL">DESC V$LOGFILE
+####member column에서 redolog file 설정됨####
+SELECT GROUP#, MEMBER FROM V$LOGFILE;
+!ls -l /tibero/0928/dbs/redo1/log01.log,
+
+SELECT GROUP#, MEMBER FROM V$LOGFILE;</code></pre><ol type="1" id="e0c98c50-8370-40d9-8484-f74ce156106e" class="numbered-list" start="10"><li>테이블 스페이스 SYSTEM 크기</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d0214f3c-4aec-4709-8911-13511fff52b8" class="code"><code class="language-SQL">SELECT SUM(BYTES)/1024/1024 FROM DBA_DATA_FILES WHERE TABLESPACE_NAME=&#x27;SYSTEM&#x27;;</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="694b6305-b901-44e3-b848-3462c18033a3" class="code"><code class="language-SQL">DESC DBA_DATA_FILES
+SELECT BYTES/1024/1024 FROM DBA_DATA_FILES WHERE TABLESPACE_NAME=&#x27;SYSTEM&#x27;</code></pre><p id="edd35b01-0df4-4521-ade3-32174d18f657" class="">→ 380MB</p><ol type="1" id="527327f7-6ab5-47a2-afec-7423957ae145" class="numbered-list" start="11"><li>테이블 스페이스 UNDO 크기<p id="3f6499b7-5db7-4922-9869-d2c13e2eac0c" class="">→ 380MB</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="88bd93d0-019e-46c9-aac6-9203cbb98488" class="code"><code class="language-SQL">SELECT BYTES/1024/1024 FROM DBA_DATA_FILES WHERE TABLESPACE_NAME=&#x27;UNDO&#x27;
+
+SELECT SUM(BYTES)/1024/1024 FROM DBA_DATA_FILES WHERE TABLESPACE_NAME=&#x27;UNDO&#x27;;</code></pre><ol type="1" id="85eaeed2-f2a7-4b0c-be50-5d16300e3c86" class="numbered-list" start="12"><li>테이블 스페이스 TEMP 크기<p id="bb7476e9-3b0d-4b9a-90fb-b5b7f64fd78c" class="">→ 380MB</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a063477f-8912-47d4-b37b-5065717d7aee" class="code"><code class="language-SQL">SELECT BYTES/1024/1024 FROM DBA_TEMP_FILES WHERE TABLESPACE_NAME=&#x27;TEMP&#x27;
+
+SELECT SUM(BYTES)/1024/1024 FROM DBA_TEMP_FILES WHERE TABLESPACE_NAME=&#x27;TEMP&#x27;;</code></pre><ol type="1" id="fb91fb4a-d51f-4710-b0bd-2e2237fc69c3" class="numbered-list" start="13"><li>테이블 스페이스 USR 크기<p id="e9b79f7e-89a9-4afb-83b2-de2a156f569f" class="">→ 100MB</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fc1f7d4b-1372-4593-92fe-cd415afef73f" class="code"><code class="language-SQL">SELECT BYTES/1024/1024 FROM DBA_DATA_FILES WHERE TABLESPACE_NAME=&#x27;USR&#x27;
+
+SELECT SUM(BYTES)/1024/1024 FROM DBA_DATA_FILES WHERE TABLESPACE_NAME=&#x27;USR&#x27;;</code></pre><ol type="1" id="850a23ab-28d1-483b-9093-8a7f95d343b1" class="numbered-list" start="14"><li>테이블 스페이스 SYSSUB 크기<p id="1d78439d-e7c2-4d03-b4e0-efd04fbad18f" class="">→ 380MB</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0ab2cf65-3a77-4395-b5cc-c3f83925fa81" class="code"><code class="language-SQL">SELECT BYTES/1024/1024 FROM DBA_DATA_FILES WHERE TABLESPACE_NAME=&#x27;SYSSUB&#x27;
+
+SELECT SUM(BYTES)/1024/1024 FROM DBA_DATA_FILES WHERE TABLESPACE_NAME=&#x27;SYSSUB&#x27;;</code></pre><ol type="1" id="a8445397-bced-4a75-8ddd-51bfad8f603d" class="numbered-list" start="15"><li>CONTROLFILE 경로와 이름 -(paramter file에서 정의)<p id="eae5b24c-fc78-4be8-850e-14ef181ef3f5" class="">→ /tibero/0928/dbs/control_1/c1.ctl</p><p id="ea5a3559-2017-45cb-a9c1-6fafb44eda2b" class="">→ /tibero/0928/dbs/control_2/c2.ctl</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="43fb1dad-c80c-4769-9c5c-2526eca70508" class="code"><code class="language-SQL">DESC V$CONTROLFILE 
+##column name 조회
+SELECT NAME FROM V$CONTROLFILE;SELECT VALUE FROM V$PARAMETERS WHERE NAME=&#x27;DB_CREATE_FILE_DEST&#x27;;
+SELECT VALUE FROM V$PARAMETERS WHERE NAME=&#x27;LOG_ARCHIVE_DEST&#x27;;</code></pre><ol type="1" id="5a55a78c-fd08-4690-b664-d696e66803e6" class="numbered-list" start="16"><li>패스워드 파일 경로<p id="544da9fe-e5e0-4889-986a-5ae948b415c3" class="">→ /tibero/0928/dbs/password</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6c18b480-4c0a-433b-ad1b-d5decf2f48ae" class="code"><code class="language-SQL">SELECT VALUE FROM DATABASE_PROPERTIES WHERE NAME=&#x27;DB_CREATE_FILE_DEST&#x27;;
+!ls -al /tibero/0928/dbs/password/</code></pre><ol type="1" id="a5fa87a9-5693-480d-aef9-5bf6e86841f1" class="numbered-list" start="17"><li>티베로 인스턴스가 사용하는 전체 메모리 크기<p id="7e933619-ada1-4c47-be04-ad843cf686b5" class="">→ 2300MB</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5a44a160-5d27-48ec-8086-19de6a3da790" class="code"><code class="language-SQL">SELECT VALUE/1024/1024 FROM V$PARAMETERS WHERE NAME=’MEMORY_TARGET’;</code></pre><ol type="1" id="456a80e1-0fcd-47c6-bc9c-4f5bd9c68b48" class="numbered-list" start="18"><li>티베로 인스턴스가 사용하는 공유 메모리 크기<p id="fcbc230a-f3e5-4d69-a711-f6414ee30439" class="">→ 1300GB</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ef1029ee-0757-40d3-84f2-70ec5398c377" class="code"><code class="language-SQL">SELECT VALUE/1024/1024 FROM V$PARAMETERS WHERE NAME=’TOTAL_SIZE’;</code></pre><ol type="1" id="0e84a873-b825-4f76-87fd-59a9bb422b17" class="numbered-list" start="19"><li>DB SESSION 최대 갯수 (=worker thread)<p id="6d13ba85-495f-4e29-8880-4902a4b5a00f" class="">→ 30</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="083fa554-b9e2-4389-97a8-9f2675de0c51" class="code"><code class="language-SQL">SELECT VALUE/1024/1024 FROM V$PARAMETERS WHERE NAME=’MAX_SESSION_COUNT’;</code></pre><ol type="1" id="c4896655-f8a6-4e9c-953d-d0d5a3b8dbdc" class="numbered-list" start="20"><li>DBMS LOG MODE<p id="6608a58d-f1bc-40ff-ab32-9020cf2aa75d" class="">→ ARCHIVELOG </p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3aeb0c81-2f01-4f97-ae28-60daf6340655" class="code"><code class="language-SQL">SELECT LOG_MODE FROM V$DATABASE;</code></pre><ol type="1" id="d7a5389b-06eb-4ca5-818b-da5c6cb3e780" class="numbered-list" start="21"><li>아카이브로그 경로<p id="e928e8e9-bde3-4037-95c3-c80faba430a0" class="">→ /tibero/0928/dbs/arch</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f62dce22-728e-4bf2-9989-29cf7e7a9ad1" class="code"><code class="language-SQL">SELECT VALUE FROM V$PARAMETERS WHERE NAME=’LOG_ACHIVE_DEST’;</code></pre><ol type="1" id="ad60bcf8-33d5-496a-b226-e908a2b0ed50" class="numbered-list" start="22"><li>(위에서 정의한 기본테이블스페이스에서 사용하는)<p id="7de98591-854c-4cd1-a32d-b0071d8ceb1f" class="">데이터파일들의 경로</p><p id="2b517015-a93b-4837-b4ac-792b22503f78" class="">→ /tibero/0928/dbs/dbs</p></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ecedd107-5e39-47c5-9f62-a8c22aa94b90" class="code"><code class="language-SQL">DESC DBA_DATA_FILES
+COL TABLE_SIZE_NAME FOR A20
+SELECT TABLESPACE_NAME, FILE_NAME FROM DBA_DATA_FILES;
+#temp file
+SELECT TABLESPACE_NAME, FILE_NAME FROM DBA_TEMP_FILES;</code></pre><hr id="360da8d2-ba14-429a-bcd0-cd1ae7dabd64"/><p id="a59a853a-21a2-4a6c-b267-56dd22e5340d" class="">&lt;.bash_profile&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="31175ccc-39dd-4821-a258-e3943f6c90ee" class="code"><code class="language-SQL">######## TIBERO ENV ########
+export TB_HOME=/tibero/0928/tibero6
+export TB_SID=t0928
+export PATH=.:$TB_HOME/bin:$TB_HOME/client/bin:~/tbinary/monitor:$PATH
+export LD_LIBRARY_PATH=$TB_HOME/lib:$TB_HOME/client/lib:$LD_LIBRARY_PATH</code></pre><p id="e7c93519-ee25-439e-9ca4-1ef7f44e24da" class="">&lt;t0928.tip&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bc5cc503-3383-404f-b628-dfca476b8c63" class="code"><code class="language-SQL">DB_NAME=t0928db
+LISTENER_PORT=9629
+CONTROL_FILES=&quot;/tibero/0928/dbs/control_1/c1.ctl&quot;,&quot;/tibero/0928/dbs/control_2/c2.ctl&quot;
+DB_CREATE_FILE_DEST=/tibero/0928/dbs/password
+LOG_ARCHIVE_DEST=/tibero/0928/dbs/arch
+MAX_SESSION_COUNT=30
+TOTAL_SHM_SIZE=1300M
+MEMORY_TARGET=2300M</code></pre><p id="26fc5c83-f658-4359-8875-9d6849ddce2f" class="">&lt;credb2.tip&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e4d36780-3fc2-4c88-be6f-9d60975e0e5e" class="code"><code class="language-SQL">SET ECHO ON
+CREATE DATABASE
+USER sys IDENTIFIED BY tibero
+MAXDATAFILES 256
+CHARACTER SET UTF8
+NATIONAL CHARACTER SET UTF8
+LOGFILE
+	GROUP0 (&#x27;/tibero/0928/dbs/redo1/log01.log&#x27;,&#x27;/tibero/0928/dbs/redo2/log02.log&#x27;) SIZE 25M,
+	GROUP1 (&#x27;/tibero/0928/dbs/redo1/log11.log&#x27;,&#x27;/tibero/0928/dbs/redo2/log12.log&#x27;) SIZE 25M,
+	GROUP2 (&#x27;/tibero/0928/dbs/redo1/log21.log&#x27;,&#x27;/tibero/0928/dbs/redo2/log22.log&#x27;) SIZE 25M,
+	GROUP3 (&#x27;/tibero/0928/dbs/redo1/log31.log&#x27;,&#x27;/tibero/0928/dbs/redo2/log32.log&#x27;) SIZE 25M,
+	GROUP4 (&#x27;/tibero/0928/dbs/redo1/log41.log&#x27;,&#x27;/tibero/0928/dbs/redo2/log42.log&#x27;) SIZE 25M
+MAXLOGFILES 100
+MAXLOGMEMBERS 2
+ARCHIVELOG
+	DATAFILE &#x27;/tibero/0928/dbs/system001.dtf&#x27; SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+DEFAULT TEMPORARY TABLESPACE TEMP
+	TEMPFILE &#x27;/tibero/0928/dbs/temp001.dtf&#x27; SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+	EXTENT MANAGEMENT LOCAL AUTOALLOCATE
+UNDO TABLESPACE UNDO
+	DATAFILE &#x27;/tibero/0928/dbs/undo001.dtf&#x27; SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+	EXTENT MANAGEMENT LOCAL UNIFORM SIZE 128k
+DEFAULT TABLESPACE USR
+	DATAFILE &#x27;/tibero/0928/dbs/usr001.dtf&#x27; SIZE 100m
+	AUTOEXTEND ON NEXT 64m MAXSIZE 3G
+SYSSUB
+	DATAFILE &#x27;/tibero/0928/dbs/syssub001.dtf&#x27; SIZE 380m
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G ;</code></pre><p id="dd9a7a01-2afc-4b95-977b-a5aafb882683" class="">
+</p><h3 id="aa0c9a21-7929-4f70-9c48-a630e483ed23" class="">Q. DB 캐릭터셋을 조건에 맞지 않게 정의하여 설치하였다. 고치는 방법은?</h3><p id="b2b3795e-3cbc-427a-bb03-0b9a7b512609" class="">→ DB를 새로 생성하면서 제대로 설정하여야 한다.</p><ol type="1" id="d1aeeb77-0120-42f5-a023-546a4cf96d33" class="numbered-list" start="1"><li>인스턴스 종료</li></ol><ol type="1" id="08e6be9d-0e2e-46b7-9ae9-b58c640b557e" class="numbered-list" start="2"><li>DATABASE 삭제(controlfile, datafile, redolog file, passwd<p id="861f00bb-80c1-492b-8ff9-c2334e15e1a6" class="">→ 만약 archivelogfile 있으면 그 파일 포함)</p></li></ol><ol type="1" id="96ea23d0-fb6c-49e9-bef2-2068fca45e9a" class="numbered-list" start="3"><li>tbboot nomount</li></ol><ol type="1" id="1321584a-102e-4aba-b38f-2013cc0813bf" class="numbered-list" start="4"><li>tbsql sys/tibero</li></ol><ol type="1" id="040a7d87-7ec9-4b6f-a514-97e5272955de" class="numbered-list" start="5"><li>CREATE DATABASE ~ 문장 실행<p id="d3f2a465-7e58-4fca-9b00-1c507d22b40c" class="">(** 캐릭터셋 항목을 제대로 포함시켜야 함)</p></li></ol><ol type="1" id="5e42d20b-fe88-4676-ba6f-ffb3e6e35e9a" class="numbered-list" start="6"><li>tbboot</li></ol><ol type="1" id="8c266070-9f07-4b6b-b17a-0f03fca0c3a2" class="numbered-list" start="7"><li><a href="http://system.sh">system.sh</a> 실행</li></ol><p id="6571e8d9-0bfc-4290-b0fe-79190aaeb003" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">Day 4 - Tibero Administration</summary><div class="indented"><ul id="bf3da76f-ef93-4b22-a051-8214b1ff441d" class="bulleted-list"><li style="list-style-type:disc">class 속성</li></ul><figure id="25f09876-66a9-44c8-aae2-4fb46d922bc6" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%208.png"><img style="width:1113px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%208.png"/></a></figure><ul id="47bf003a-051c-4480-9cd3-611ab9b16cd0" class="bulleted-list"><li style="list-style-type:disc">DB_NAME</li></ul><figure id="b62247d4-b2d8-41c2-89a2-68dea79ebac6" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%209.png"><img style="width:396px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%209.png"/></a></figure><p id="955ca409-b8a4-40f9-a280-d0b8e167e90a" class="">→ persistent (수정하지 않아도 됨) ↔ adjustable (수정 가능)</p><p id="6fe5b56c-c2ac-4280-a69a-c369109dcd59" class="">
+</p><ul id="6688f2c6-1953-4dcd-a079-35a6cc3d6098" class="bulleted-list"><li style="list-style-type:disc">USER 조회</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4c7ede3b-73ae-4659-ba20-6bd7b98d89f6" class="code"><code class="language-SQL">DESC DBA_USERS;</code></pre><ul id="857a9143-a35f-4607-bfbf-0cec706fe069" class="bulleted-list"><li style="list-style-type:disc">사용자 관리 (user 6개)</li></ul><figure id="5122f61a-a31c-46f7-a9bd-7a0a10e86574" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2010.png"><img style="width:837px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2010.png"/></a></figure><p id="30de19f9-d6de-4b17-afad-5be1323f79c9" class="">→ user는 schema 소유 </p><p id="b1cbcd1c-744d-4daa-833f-a3700a52db6c" class="">→ user 존재(schema 있음)</p><p id="77d9d161-4b4a-4d02-bfc0-bea22a39ff69" class="">→ schema는 객체 관리하여 user에게 권한이 있는 table(Dictionary object) 만들기 가능</p><ul id="2e02075f-1260-4686-b1b0-fe52de20b7f8" class="bulleted-list"><li style="list-style-type:disc">사용자 계정</li></ul><p id="48a97dcf-421c-46b0-b3b1-bd236165aa6d" class="">→ Login 필요</p><p id="6b08c851-f07f-4e11-be9b-1af8a7962778" class="">→ db내의 table 안에 password 있음</p><p id="c7c0becd-b829-4135-92a2-79ce60f7c708" class="">
+</p><h3 id="4009a815-4d19-4046-aef9-a9506b8107c8" class=""><mark class="highlight-yellow_background">시험 관련 내용</mark></h3><ol type="1" id="133f8c89-9c3d-4ab5-bba1-a0c5e877ef81" class="numbered-list" start="1"><li>설치<br/>설치에 대한 요건 - 설치 실습<br/></li></ol><ol type="1" id="386db328-cc08-40aa-a9bd-e73c3df81b3b" class="numbered-list" start="2"><li>점검<br/>설치를 한것에 대해서 조회(점검) - 설치가 제대로 됐는지 확인 - 어떤 식으로 점검을 했었는지(SELECT query) - query 작성 어떻게 해야하는지<br/></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a36906e5-b287-41e8-bc5c-53cad9868b87" class="code"><code class="language-SQL">SET ECHO ON
+
+SELECT INSTANCE_NAME FROM V$INSTANCE;
+
+QUIT</code></pre><ul id="9d1da700-360e-420c-bffd-5ebc1a817281" class="bulleted-list"><li style="list-style-type:disc">점검 query (인스턴스 이름 확인)</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="837c2ff0-a9fc-4a60-9a29-2a89b6f85eda" class="code"><code class="language-SQL">tbsql sys/tibero @sample.sql</code></pre><ul id="d10f97c4-972e-478b-a365-6e78f80698f9" class="bulleted-list"><li style="list-style-type:disc">접속 후 실행하고자 하는 sql query를 @뒤에 넣기</li></ul><ul id="44420d82-574d-459d-910e-6a1be0b8df26" class="bulleted-list"><li style="list-style-type:disc">언급한 내용(자료)들 추가됨</li></ul><ul id="e1cf7d7a-d68d-4fb5-9fcf-cf6189695607" class="bulleted-list"><li style="list-style-type:disc">변형이 되어 나올 수도 있음 (새로운 내용 추가)</li></ul><p id="b0352b05-e29e-4b22-953c-7eed37daad18" class="">
+</p><p id="ba028bd7-42a2-4458-bac3-e8a56d991da9" class="">CREATE TABLE TBL0930 (TBL0930_ID NUMBER PRIMARY KEY, name VARCHAR(20) UNIQUE)</p><p id="3e842951-1b9f-4a7d-9d2d-02b7ff99c2c8" class="">SELECT * FROM ALL_TAB_COMMENTS WHERE TABLE_NAME = &#x27;TBL0930&#x27;;</p><p id="fb1869ef-3010-4404-a449-ae6183688be9" class="">
+</p><p id="5c0d8597-8741-4094-beb7-0f77f52a2f24" class="">[tibero@T1:/tibero/0930/tibero6/scripts]</p><p id="7365d664-8eed-4587-8ba4-53073288169e" class="">
+</p><p id="fffaa88e-3d26-4aff-b54a-d8097197c9b3" class="">SELECT TABLESPACE_NAME, FILE_NAME, BYTES FROM dba_data_files;</p><p id="9a0cb739-a76c-443a-a31c-732a3861db77" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">DAY5 - Database Link_1</summary><div class="indented"><p id="9f4dea4c-dd3c-4912-abde-cdc67f3e959e" class="block-color-gray_background">-Tibero6 Online Manual (관리자 참조) &amp; 구성가이드pdf</p><h3 id="8ce13287-9967-4259-ae87-b0a097bdf40e" class="">Database Link</h3><ul id="6e921e7c-c29c-4b6f-987f-9630c9a39933" class="bulleted-list"><li style="list-style-type:disc">Remote Database<ul id="eff95365-9bfb-42ba-a0ab-81ad755bdd9e" class="bulleted-list"><li style="list-style-type:circle">데이터 처리를 위한 데이터베이스 따로 만듦 (내부 업무용 데이터 들어있음) </li></ul><ul id="040fb549-cc0d-4db5-868c-1daebf83bbc4" class="bulleted-list"><li style="list-style-type:circle">비용절감을 위해 mysql 사용/ oracle 사용 등 여러개 사용</li></ul><ul id="4dae4f2c-d85c-4a6a-ae96-b51a7c4eb770" class="bulleted-list"><li style="list-style-type:circle">공통분모와 관련된 데이터 뽑아 같이 연결하여 봐야함</li></ul></li></ul><ul id="278aec2b-62de-4125-b9a3-9f4aecf0cd93" class="bulleted-list"><li style="list-style-type:disc">사용자가 db server 와 interface 하려면 → interface driver (ex) library file)<ul id="145e7b25-599b-41dd-ab23-15a99732362e" class="bulleted-list"><li style="list-style-type:circle">스키마 객체 중 하나 (CREATE DATABASE LINK ~~~~;)</li></ul><ul id="d0ab0cc4-1c6f-4e8c-926e-04fb369d22bc" class="bulleted-list"><li style="list-style-type:circle">특정 user 가 소유하고 있게 되는 것</li></ul><ul id="f41f78a1-48c9-4196-90e5-53cdad68d2e3" class="bulleted-list"><li style="list-style-type:circle">create database link query 실행하여 만드는 것<ul id="56b644e8-277c-4f1a-a9d2-b2f490356b2f" class="bulleted-list"><li style="list-style-type:square">local database에서 실행 : database link가 local database에 query를 통해 만들어짐</li></ul></li></ul></li></ul><ul id="f726037b-a603-402a-9251-29640ee30e5d" class="bulleted-list"><li style="list-style-type:disc">gateway (모든 db에 적용됨) - query를 remote database에 전달해줌<ul id="9bebae38-362a-4b8a-bbb7-2f52ddb521c6" class="bulleted-list"><li style="list-style-type:circle">tibero가 아닌 다른 db에 query를 던지려면 접속을 할 interface driver 필요</li></ul><ul id="70597809-b492-4be0-95ad-c2059ec8cd25" class="bulleted-list"><li style="list-style-type:circle">gateway에는 interface driver가 들어가서 접속할 수 있도록 함</li></ul><ul id="103cf949-68e1-4dd2-9a70-bd3c2be4821b" class="bulleted-list"><li style="list-style-type:circle">직접 interface driver를 핸들링할 순 없으므로 gateway를 사용하여 실행</li></ul><ul id="b509143a-bec3-44da-b0f3-7dd9d0033079" class="bulleted-list"><li style="list-style-type:circle">gateway, interface driver 모두 file → 모두 binary안에 들어있음</li></ul><ul id="31952bbc-d205-46c7-af35-c1c3051826f5" class="bulleted-list"><li style="list-style-type:circle">db 객체 어디에 있는지 → gateway는 tibero(local db) binary안에 client directory안에 있음</li></ul><ul id="73d18222-77a1-4739-a673-72938615bd64" class="bulleted-list"><li style="list-style-type:circle">같은 db로 전달할때는 별도로 gateway를 설치할 필요 없음 → 바로 query 실행 가능<ul id="f3551b62-fd85-4fb4-9bfc-0212db94d024" class="bulleted-list"><li style="list-style-type:square">local db에 이미 tibero gateway와 관련된 정보 있기 때문</li></ul><ul id="bfd0b75e-f8f2-4572-bc12-3ecac60266d4" class="bulleted-list"><li style="list-style-type:square">db에 정보 던지려면 접속 정보에 대한 설정 필요</li></ul></li></ul></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="687f774c-0f80-4024-9fbc-d4b05e890e2b" class="code"><code class="language-SQL">create public database link public_tibero using &#x27;remote_2&#x27;;</code></pre><p id="fa393241-0e3b-4272-91fc-da34e48e5c5d" class="">→ remote_2(접속정보) 를 이용하여 public_tibero라는 db만든다</p><p id="719f43fe-4581-4a00-acb3-3fae50838471" class="">→ remote_2는 연결할 db 를 가리키는 이름으로 tbdsn.tbr 파일에 해당 db 연결 정보가 저장되어야 함. (ip, post, db name)</p><p id="67fa22d2-b1b4-4c1a-993e-36fc4a9c85b8" class="">
+</p><ul id="0f4f46a3-f643-4830-91ac-4c8e878cb87c" class="bulleted-list"><li style="list-style-type:disc">Public DB Link <ul id="d9ce2db7-64d9-413e-8a87-6ed65bd6faea" class="bulleted-list"><li style="list-style-type:circle">누구나 다 사용(접근) 가능 → 다른 user들도 db 이용 가능</li></ul></li></ul><ul id="12c165fc-9497-4622-a3ef-10b3f9eb67c3" class="bulleted-list"><li style="list-style-type:disc">Private DB Link <ul id="88206c70-a94a-4d06-be33-d2f60364280e" class="bulleted-list"><li style="list-style-type:circle">db link객체는 테이블처럼 특정 스키마에 속함 </li></ul><ul id="1f0a2e6b-d793-44a3-b543-1472a16732db" class="bulleted-list"><li style="list-style-type:circle">user create했으므로 그 user의 스키마에 속함. → 그 user만 사용</li></ul></li></ul><figure id="0b52e51c-4133-442f-9639-ebe99d57cdf3" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2011.png"><img style="width:744px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2011.png"/></a></figure><ul id="e96c85c7-6974-4cff-8598-0bd7f4c79729" class="bulleted-list"><li style="list-style-type:disc">멀티 스레드 서버 방식(listener 방식)<ul id="c7a8ad05-161a-4b52-88fd-75891e550298" class="bulleted-list"><li style="list-style-type:circle">&lt;tbdsn.tbr&gt; : gateway에 접속하도록함</li></ul><figure id="3cd49365-e6c8-4bd7-b153-243041ee56ba" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2012.png"><img style="width:406px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2012.png"/></a></figure><ul id="a6b55d4f-e10b-4a52-ad84-89efbfe92284" class="bulleted-list"><li style="list-style-type:circle">ora_link_remote : 뭐라고 지정하던 상관 x → db link 객체 이름(using 절에 들어가는)</li></ul><figure id="9375a019-043c-494a-88bd-a9570a39fd22" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2013.png"><img style="width:401px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2013.png"/></a></figure><ul id="287bc776-4ecc-4310-a634-ad4bc2df628d" class="bulleted-list"><li style="list-style-type:circle">실행 및 종료</li></ul><figure id="a9497f40-f66f-4750-87ea-beaf5b9fb6d9" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2014.png"><img style="width:528px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2014.png"/></a></figure><ul id="41e9d354-225c-410d-9cf9-34f31b4621ff" class="bulleted-list"><li style="list-style-type:circle">환경변수(bash_profile에 추가)<ul id="4881e722-c554-41af-9c95-765e10ee00cf" class="bulleted-list"><li style="list-style-type:square">게이트웨이는 기본적으로 TBGW_HOME 환경변수를 통해 설정 파일을 읽고 로그 파일을 기록한다.<p id="9eb075c6-a94b-4eb2-b426-3da787fb693d" class="">TBGW_HOME 환경변수가 설정되어 있지 않은 경우에는 기본값은 &#x27;${TB_HOME}/client/gateway&#x27;이다. Windows 환경에서는 기본값이 &#x27;%TB_HOME%\client\gateway&#x27;로 설정</p></li></ul><ul id="04ce2559-8f55-4e26-bbc4-3e18a394b7d4" class="bulleted-list"><li style="list-style-type:square">directory 구조 (사용자가 직접 지정해주어야함)</li></ul><figure id="e3541464-f367-411b-bec9-ba03031b7d38" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2015.png"><img style="width:339px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2015.png"/></a></figure><p id="985f9ddb-984f-403d-80e6-9f07987e717e" class="">→ 게이트웨이의 로그파일 빼고는 사용자가 설치과정에서 모두 만들어야함</p><p id="1847867b-d01e-4f31-942a-4806f4ccf4b4" class="">&lt;tbgw.cfg&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bde3ab7c-6a15-4eaf-b96a-106cc2e546a7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">LOG_DIR=${TBGW_HOME}/{DBMS 벤더명}/log
+LOG_LVL=2
+LISTENER_PORT=9999
+MAX_LOG_SIZE=20k
+FETCH_SIZE=32k</code></pre></li></ul></li></ul><ul id="1c42fcb4-2196-4ca0-90a3-b6c9cb487a82" class="bulleted-list"><li style="list-style-type:disc">V$DBLINK</li></ul><figure id="ea6b66a2-fb5f-45ad-9125-02c2138f0978" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2016.png"><img style="width:325px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2016.png"/></a></figure><ul id="735c69c7-7e73-4ab8-bed9-407fbafb33e8" class="bulleted-list"><li style="list-style-type:disc">table이 emplyee만(@없이) local db :sys 사용자</li></ul><ul id="84744eba-ca68-41e7-82cd-69616ccf214d" class="bulleted-list"><li style="list-style-type:disc">employee@ 뒤에 table이름은 remote db안에 있는 employee 테이블</li></ul><figure id="4bca55fe-bb72-40f2-81a2-70b5b5b3913c" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2017.png"><img style="width:1249px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2017.png"/></a></figure><ul id="b5c72bd0-a540-49f1-a532-1cf4a0d29c77" class="bulleted-list"><li style="list-style-type:disc">데이터베이스 링크 종료하려면</li></ul><p id="eea1465a-4b85-4f48-8df3-61f08424658f" class="">→ commit 문을 통해 해당 트랜잭션을 종료 (commit;) 후 링크 종료</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fc2220fb-d21e-4b41-b46b-bff20a58a74e" class="code"><code class="language-SQL">alter session close database link remote_tibero;</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a0674734-4851-4e14-9162-f614bcd071ff" class="code"><code class="language-SQL">select * from V$DBLINK;</code></pre><h3 id="eb5a5337-b8a7-433e-a463-d60ff583f611" class="">DB_Link 설치과정</h3><ul id="c7e001e4-eabd-43a4-96f3-d72e4a4e8f04" class="bulleted-list"><li style="list-style-type:disc">오라클 클라이언드 위치<p id="e673329b-35b9-45e2-a726-565eae8ee548" class="">→ /tibero에서 압축해제하여 /tibero/instantclient_11_2 디렉토리가 만들어짐</p></li></ul><ul id="0767c9a2-ea7d-415c-8333-5c6b3e50d6af" class="bulleted-list"><li style="list-style-type:disc">게이트웨이 위치<p id="f8927be2-1e0a-406c-a7ad-1d691789c866" class="">→ /tibero에서 mkdir tbgateway 실행하여 /tibero/tbgateway 디렉토리가 만들어지고 이를 $TBGW_HOME으로 사용한다.</p></li></ul></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">DAY6 - Database Link_2, Tools</summary><div class="indented"><h2 id="933b69a3-85e6-45ca-98f3-f63cc562cf61" class="">DATABASE LINK</h2><p id="560dccbf-baf0-4675-96ff-c60ce0242f69" class="">###DBLINK (T to T)</p><p id="c34b9258-891c-42da-9df1-b74a50335fb2" class="">Database link (t to t) 객체를 이용하여, A 데이터베이스에서 테이블을 가져오려고 함.</p><p id="f2513f7e-1806-4230-9588-ed53b13d67b6" class="">
+</p><p id="8d5d44bd-f8e4-41b2-8cb3-f768e884655f" class="">** A 데이터베이스 접속정보 (본인의 현재 TIBERO)</p><p id="8f110ecf-d8a3-444c-8d55-050b7381acd9" class="">IP :</p><p id="66eee092-e0c6-4948-9af4-6a73c6263491" class="">PORT :</p><p id="d20602b8-1209-4207-abba-7f553b3741b7" class="">SID :</p><p id="472dd931-82c7-4118-bf67-22c2e739d92b" class="">USER : SYS</p><p id="44bcccc4-a1b3-4bd4-b3bf-ac1da3495b86" class="">PASSWORD : TIBERO</p><p id="5c3bc23f-7d56-4493-ab23-861ca412c011" class="">
+</p><p id="0c04cadb-f6c4-4a1d-ad22-65863713f0d4" class="">문제1) 수강생 DB에 새로운 스키마(이름: EDU_DBLINK, 암호 : EDU_DBLINK)를 생성하고, 이곳에 DATABASE LINK 객체(이름 : EDU_TLINK)를 만드세요.</p><p id="612f7196-49a0-4896-b53d-a15f6007f516" class="">
+</p><p id="765031fb-1dfd-4d6f-8f7d-024211d624c9" class="">문제2) DATABASE LINK를 이용하여 A 데이터베이스의 ALL_USERS를 수강생 DB의 EDU_DBLINK 스키마로 가져오세요 (이름은 MY_USERS, 데이터 포함)</p><p id="6b35ab45-7f2e-4be0-a735-da19e7561546" class="">
+</p><p id="854834be-f2ab-470a-a4ca-5414cfd9dc0e" class="">
+</p><p id="b799bcc0-b2c6-4a35-ab95-7c89ee0ea951" class="">원격지 DB에 접근하여 (TLINK DB링크 이용) 거기에 있는 players 테이블의 선수데이터중에서 젊은 (25세이하 나이) 선수들의 데이터만 가져와서 테이블을 생성하시오.</p><p id="9a29d566-9b98-4fbe-9ec6-a937461b1ad4" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bc247e5d-9359-4ebf-abef-8c642dd9229f" class="code"><code class="language-SQL">## 테이블을 가져올때 사용하는 CREATE TABLE ~ AS SELECT ~ 쿼리 사용예)
+CREATE TABLE young_players ( player_id, name, alais, age, team )
+AS 
+SELECT player_id, name, nickname, age, team
+FROM players 
+WHERE age &lt;= 25;</code></pre><p id="164c5a9b-97bf-4ac2-8f3b-04c7e06a602e" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c91b7e7b-34a0-4829-a236-bf4c14201e1c" class="code"><code class="language-SQL">## CREATE TABLE ~ AS SELECT ~ 사용하여 DB링크 건너편의 원격지 DB의 테이블, 데이터를 가져오는 방법의 예)
+CREATE TABLE young_players ( player_id, name, alais, age, team )
+AS
+SELECT player_id, name, nickname, age, team
+FROM players@TLINLK
+WHERE age &lt;= 25;</code></pre><p id="833ab7b9-8894-4998-bf6b-6f3b24fea251" class="">
+</p><p id="276e72ef-7319-420a-a3b4-6e81236baf51" class="">→ 데이터만 가져오고 싶으면 CREATE → INSERT 로 변경</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7d6e6457-d4c7-4462-ab33-e2378f6c7c5d" class="code"><code class="language-SQL">### 데이터만 가져오는(DB링크 사용) 경우의 예)
+INSERT INTO young_players (player_id,name,alais,age,team)
+AS 
+SELECT player_id, name, nickname, age, team
+FROM players@TLINK
+WHERE age ≤ 25;</code></pre><p id="1b62599f-2789-4488-95d1-9de3cef74504" class="">
+</p><p id="07cd8e86-0237-4218-a1cb-7cd91bed2849" class="">* 위의 조건대로 작업완료후 아래와 같이 실행시, 생성된 테이블로 부터 조회가 되어야 함.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c91a644b-4e23-4425-ac4b-f93c87bc2c25" class="code"><code class="language-SQL">tbsql EDU_DBLINK/EDU_DBLINK
+SELECT * FROM MY_USERS;</code></pre><p id="4307fdd3-25e1-4eeb-8778-1fd315437a2d" class="">
+</p><h2 id="fe5281de-a967-4f72-a02c-f6922425d89a" class="">Tibero Tools</h2><p id="1142d0d8-d791-47f7-98da-8ef8e7c9a49a" class="block-color-gray_background">tibero_tools.pdf &amp; Online manual - 유틸리티 안내서</p><ul id="da712235-b214-40df-8fe5-92bda6eafdc8" class="bulleted-list"><li style="list-style-type:disc">tbexport</li></ul><figure id="a6c49772-5bdd-445c-9c13-13f24252ad76" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2018.png"><img style="width:617px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2018.png"/></a></figure><ul id="b4fce9f7-b9b2-4036-ab28-e6618fdf783d" class="bulleted-list"><li style="list-style-type:disc">고정된 레코드 형태</li></ul><figure id="439a2d6e-1889-4fd7-b0e8-16146a9f10f2" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2019.png"><img style="width:485px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2019.png"/></a></figure><p id="46e990cc-28d5-4a7b-bd15-27e85da6ad47" class="">      →  6번째 자리부터 12번째 자리까지 두번째 필드 ename </p><figure id="9a111ae7-1b8a-4d88-a5f8-af2e2bc2f2b8" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2020.png"><img style="width:162px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2020.png"/></a></figure><p id="93e981e3-0b97-4517-9f20-6cc65aa0135b" class="">
+</p><ul id="19e802f6-0c1a-4783-985c-7be33175646c" class="bulleted-list"><li style="list-style-type:disc">분리된 레코드 형태</li></ul><figure id="ce0f206a-e9cb-4941-85d7-be4629ab8583" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2021.png"><img style="width:298px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2021.png"/></a></figure><figure id="0722d0b3-a07e-41b1-9b9d-5d16412a9f1e" class="image"><a href="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2022.png"><img style="width:460px" src="%E1%84%90%E1%85%B5%E1%84%87%E1%85%A6%E1%84%85%E1%85%A9%20DBMS%20d3dacfc09442400dba11038130e87a89/Untitled%2022.png"/></a></figure><p id="2ea8383f-2dca-4864-8f42-57e6c8fcaecb" class="">
+</p><ul id="b73fc94a-3638-4aa3-a5d6-0c2e5f8151f5" class="bulleted-list"><li style="list-style-type:disc">오류파일 (로딩이 안된 실패한 레코드파일)<ul id="b200c8ea-2a95-48c5-93ee-810ae9caeabb" class="bulleted-list"><li style="list-style-type:circle">로딩안된 원인 찾아 수정 후 다시 로드</li></ul></li></ul><p id="fe804645-61d2-4f48-803c-4ed74e3e80bd" class="">
+</p><ul id="f6e56e11-a77a-4160-9f1a-2477ab54a8dd" class="bulleted-list"><li style="list-style-type:disc">tbloader</li></ul><p id="c7f88774-58ad-430f-a240-313617a3ca14" class=""><a href="https://technet.tmaxsoft.com/upload/download/online/tibero/pver-20150504-000001/tibero_util/chapter_tbloader.html#d5e9273">https://technet.tmaxsoft.com/upload/download/online/tibero/pver-20150504-000001/tibero_util/chapter_tbloader.html#d5e9273</a></p><p id="36923842-5ab2-446e-86fe-9bcf31014488" class="">
+</p><ol type="1" id="ac3f824c-dc66-4ec8-8adb-72a852443107" class="numbered-list" start="1"><li>테이블을 생성한다(모든 예제에서 공통 사항이다).</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="95ac3ff3-f484-40e3-886b-840f743f49e8" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">CREATE TABLE MEMBER
+(
+    ID        NUMBER(4) NOT NULL,
+    NAME      VARCHAR2(10),
+    JOB       VARCHAR2(9),
+    BIRTHDATE DATE,
+    CITY      VARCHAR2(10),
+    PICTURE   BLOB,
+    AGE       NUMBER(3),
+    RESUME    CLOB
+);
+
+CREATE TABLE CLUB
+(
+    ID       NUMBER(6) NOT NULL,
+    NAME     VARCHAR2(10),
+    MASTERID NUMBER(4)
+);</code></pre><ol type="1" id="780ee3f6-bc54-4c18-a2c7-9ad23ff73db1" class="numbered-list" start="2"><li>컨트롤 파일을 작성한다. (control.ctl)</li></ol><p id="b2a38ade-c656-495d-b54d-fe493f720ed3" class="">→ loader directory에 vi 작성</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="73143cc2-335e-435e-9832-58ac4415fcd6" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">LOAD DATA
+INFILE &#x27;./data.dat&#x27;
+APPEND
+INTO TABLE club
+FIELDS TERMINATED BY &#x27;,&#x27;
+       OPTIONALLY ENCLOSED BY &#x27;&quot;&#x27;
+LINES TERMINATED BY &#x27;|\n&#x27;
+IGNORE 1 LINES
+(
+ id integer external,
+ name,
+ masterid integer external
+)</code></pre><ol type="1" id="6ec5863c-38dc-4b00-99c2-d69c476612e2" class="numbered-list" start="3"><li>데이터 파일을 작성한다. (data.dat)</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a5ee3f8f-884d-4a06-bb7d-178e24685773" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">id     name      masterid|
+111111,FC-SNIFER,2345|
+dkkkkkkkkkk|
+111112,&quot;DOCTOR CLUBE ZZANG&quot;,2222|
+111113,&quot;ARTLOVE&quot;,3333|
+111114,FINANCE,1235|
+111115,&quot;DANCE MANIA&quot;,2456|
+111116,&quot;MUHANZILZU&quot;,2378|
+111117,&quot;INT&#x27;L&quot;,5555</code></pre><ol type="1" id="e2ea9c42-2719-465a-aa7a-4da0ebc1f6fa" class="numbered-list" start="4"><li>tbLoader 유틸리티를 실행한다.</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bdb8ee73-6b5e-4675-b03a-1b96568f6dde" class="code"><code class="language-Plain Text">tbloader userid=tibero/tmax@tibero control=./control.ctl</code></pre><ol type="1" id="8a6b8118-5885-4359-8aa1-a0bb8320f0f7" class="numbered-list" start="5"><li>로그 파일과 오류 파일을 확인한다.</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d1b47d82-3487-426c-931d-a672145fedc1" class="code"><code class="language-Plain Text">cat control.log
+cat data.bad</code></pre><p id="a7fbd084-feea-470d-9253-46e9d6dfaa78" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">DAY7 - Backup_Recovery</summary><div class="indented"><h2 id="4a296789-6d9d-49d4-a564-379957aeac0d" class="">Offline Backup</h2><h3 id="3c73ba47-8a52-400a-b127-94e90447302e" class="">##백업하기 위한 정상상태인지 확인하는 법</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ef4a0467-816c-470e-ae55-32b99e0596e6" class="code"><code class="language-SQL">tbdown clean
+tbboot
+tbsql sys/tibero
+
+SQL&gt; select name from v$database;
+
+NAME
+----------------------------------------
+tibero
+
+1 row selected.
+
+SQL&gt; select username from dba_users;
+
+USERNAME
+--------------------------------------------------------------------------------
+SYS
+SYSCAT
+SYSGIS
+OUTLN
+TIBERO
+TIBERO1
+EDU_DBLINK
+
+7 rows selected.
+</code></pre><h3 id="965d733c-967b-4e38-8c85-7b2b6f4186d5" class="">##datafile 조회</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7265fcf7-baa1-44c2-bf5b-51087f32b0e8" class="code"><code class="language-SQL">SQL&gt; select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/tibero/tbdata/tibero/system001.dtf
+/tibero/tbdata/tibero/undo001.dtf
+/tibero/tbdata/tibero/usr001.dtf
+/tibero/tbdata/tibero/syssub001.dtf
+
+4 rows selected.
+
+SQL&gt; select file_name from dba_data_files;
+
+FILE_NAME
+--------------------------------------------------------------------------------
+/tibero/tbdata/tibero/system001.dtf
+/tibero/tbdata/tibero/undo001.dtf
+/tibero/tbdata/tibero/usr001.dtf
+/tibero/tbdata/tibero/syssub001.dtf
+
+4 rows selected.</code></pre><h3 id="d1a64c6d-f265-4149-92ee-8c0d631bc651" class="">##logfile 조회</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c8fe5b5d-eef9-4f47-99dd-3147adf787f1" class="code"><code class="language-SQL">SQL&gt; SELECT MEMBER FROM V$LOGFILE;
+
+MEMBER
+--------------------------------------------------------------------------------
+/tibero/tbdata/tibero/log01.log
+/tibero/tbdata/tibero/log11.log
+/tibero/tbdata/tibero/log21.log</code></pre><h3 id="af48cd40-0602-410e-9da2-5180fffb7f47" class="">##log_mode 조회</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ac1d9911-0c13-4f3f-a18c-96f2dcd11996" class="code"><code class="language-SQL">SQL&gt; SELECT LOG_MODE FROM V$DATABASE;
+
+LOG_MODE
+------------
+NOARCHIVELOG
+
+1 row selected.</code></pre><h3 id="d61c4b9d-821a-4bc0-9ff8-122dd3ff30d3" class="">##NOARCHIVELOG → ARCHIVELOG 모드로 변경</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c1f6b7ec-8efb-4713-8ab3-096e396a7a3b" class="code"><code class="language-SQL">tbdown immediate
+tbboot mount  ##mount 모드에서 변경해야됨
+
+tbsql sys/tibero
+SQL&gt; ALTER DATABASE ARCHIVELOG;
+
+Database altered.
+
+SQL&gt; QUIT
+Disconnected.
+
+tbdown
+tbboot</code></pre><p id="29c16202-020b-47cc-a5f8-ae1a49f3b8b2" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8c2f0986-299a-4cf1-a0ae-e6c4c4923880" class="code"><code class="language-SQL">tbsql sys/tibero
+SQL&gt; SELECT LOG_MODE FROM V$DATABASE;
+
+LOG_MODE
+------------
+ARCHIVELOG
+
+1 row selected.
+
+SQL&gt; ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL&gt; SELECT NAME FROM V$ARCHIVE_DEST_FILES;
+
+NAME
+---------------------------------------------------------------                       -----------------
+/tibero/tbdata/tibero/arch/log-t0-r0-s3.arc
+
+1 row selected.
+
+SQL&gt; SELECT NAME FROM V$CONTROLFILE;
+
+NAME
+---------------------------------------------------------------                       -----------------
+/tibero/tbdata/tibero/c1.ctl
+/tibero/tbdata/tibero/c2.ctl
+
+2 rows selected.
+
+SQL&gt; tbdown immediate
+DB instance was terminated.
+SQL&gt;
+SQL&gt; quit</code></pre><h3 id="ad13552b-7bf2-4e8a-bb3a-a6d086c280a1" class="">##백업 디렉토리 생성 후 원래 파일 복사 (tbdown immediate 상태에서)</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a7a0802c-727c-4364-b8aa-ff93a0895285" class="code"><code class="language-SQL">[tibero@T1:/]$ mkdir /tibero/s/backup_off_1014
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ cp /tibero/tbdata/tibero/*.dtf  /tibero/s/backup_off_1014
+[tibero@T1:/]$
+[tibero@T1:/]$ cp /tibero/tbdata/tibero/log*.log   /tibero/s/backup_off_1014
+[tibero@T1:/]$
+[tibero@T1:/]$ /tibero/tbdata/tibero/arch/log-*.arc    /tibero/s/backup_off_1014
+-bash: /tibero/tbdata/tibero/arch/log-t0-r0-s3.arc: Permission denied
+[tibero@T1:/]$
+[tibero@T1:/]$ cp /tibero/tbdata/tibero/arch/log-*.arc    /tibero/s/backup_off_1014   
+[tibero@T1:/]$ cp /tibero/tbdata/tibero/*.ctl   /tibero/s/backup_off_1014
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/s/backup_off_1014
+total 710632
+drwxrwx--- 1 root vboxsf      4096 Oct  6 10:20 .
+drwxrwx--- 1 root vboxsf         0 Oct  6 10:14 ..
+-rwxrwx--- 1 root vboxsf  22822912 Oct  6 10:20 c1.ctl
+-rwxrwx--- 1 root vboxsf  22822912 Oct  6 10:20 c2.ctl
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:18 log01.log
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:18 log11.log
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:18 log21.log
+-rwxrwx--- 1 root vboxsf    461824 Oct  6 10:19 log-t0-r0-s3.arc
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:16 syssub001.dtf
+-rwxrwx--- 1 root vboxsf 104857600 Oct  6 10:16 system001.dtf
+-rwxrwx--- 1 root vboxsf 104857600 Oct  6 10:16 temp001.dtf
+-rwxrwx--- 1 root vboxsf 209715200 Oct  6 10:16 undo001.dtf
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:16 usr001.dtf
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al $TB_HOME/config/$TB_SID.tip
+-rw-r--r-- 1 tibero dba 255 Sep 27 16:21 /tibero/tibero6/config/tibero.tip
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ cp /tibero/tibero6/config/tibero.tip   /tibero/s/backup_off_1014
+[tibero@T1:/]$
+[tibero@T1:/]$ cat /tibero/tibero6/config/tibero.tip | grep DB_CREATE_FILES_DEST      
+[tibero@T1:/]$ cat /tibero/tibero6/config/tibero.tip | grep DB_CREATE_FILE_DEST       
+DB_CREATE_FILE_DEST=/tibero/tbdata/tibero
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/tbdata/tibero/.passwd
+-r-------- 1 tibero dba 24 Sep 27 16:55 /tibero/tbdata/tibero/.passwd
+[tibero@T1:/]$
+[tibero@T1:/]$ cp /tibero/tbdata/tibero/.passwd   /tibero/s/backup_off_1014
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/s/backup_off_1014
+total 710633
+drwxrwx--- 1 root vboxsf      4096 Oct  6 11:03 .
+drwxrwx--- 1 root vboxsf         0 Oct  6 10:14 ..
+-rwxrwx--- 1 root vboxsf  22822912 Oct  6 10:20 c1.ctl
+-rwxrwx--- 1 root vboxsf  22822912 Oct  6 10:20 c2.ctl
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:18 log01.log
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:18 log11.log
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:18 log21.log
+-rwxrwx--- 1 root vboxsf    461824 Oct  6 10:19 log-t0-r0-s3.arc
+-rwxrwx--- 1 root vboxsf        24 Oct  6 11:03 .passwd
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:16 syssub001.dtf
+-rwxrwx--- 1 root vboxsf 104857600 Oct  6 10:16 system001.dtf
+-rwxrwx--- 1 root vboxsf 104857600 Oct  6 10:16 temp001.dtf
+-rwxrwx--- 1 root vboxsf       255 Oct  6 11:01 tibero.tip
+-rwxrwx--- 1 root vboxsf 209715200 Oct  6 10:16 undo001.dtf
+-rwxrwx--- 1 root vboxsf  52428800 Oct  6 10:16 usr001.dtf
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ tbboot
+Listener port = 8629
+
+Tibero 6
+
+TmaxData Corporation Copyright (c) 2008-. All rights reserved.
+Tibero instance started up (NORMAL mode).</code></pre><h3 id="66b40667-d084-4832-96fc-c0bb5626b170" class="">tbdown abnormal (tibero)</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b31be67b-7dcd-46c3-b935-3992375aa675" class="code"><code class="language-SQL">[tibero@T1:/]$ tbdown abnormal
+Tibero instance terminated (ABNORMAL mode).
+
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/tbdata/tibero/*.dtf
+-rw------- 1 tibero dba  52428800 Oct  6 11:04 /tibero/tbdata/tibero/syssub001.dtf
+-rw------- 1 tibero dba 104857600 Oct  6 11:06 /tibero/tbdata/tibero/system001.dtf
+-rw------- 1 tibero dba 104857600 Sep 27 16:55 /tibero/tbdata/tibero/temp001.dtf
+-rw------- 1 tibero dba 209715200 Oct  6 11:06 /tibero/tbdata/tibero/undo001.dtf
+-rw------- 1 tibero dba  52428800 Oct  6 11:04 /tibero/tbdata/tibero/usr001.dtf
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ rm /tibero/tbdata/tibero/*.dtf
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/tbdata/tibero/log*.log
+-rw------- 1 tibero dba 52428800 Oct  6 11:07 /tibero/tbdata/tibero/log01.log
+-rw------- 1 tibero dba 52428800 Oct  6 11:04 /tibero/tbdata/tibero/log11.log
+-rw------- 1 tibero dba 52428800 Oct  6 11:04 /tibero/tbdata/tibero/log21.log
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ rm /tibero/tbdata/tibero/log*.log
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/tbdata/tibero/arch/log-*.arc
+-rw------- 1 tibero dba 461824 Oct  6 10:09 /tibero/tbdata/tibero/arch/log-t0-r0-s3   .arc
+[tibero@T1:/]$
+[tibero@T1:/]$ rm /tibero/tbdata/tibero/arch/log-*.arc
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/tbdata/tibero/*.ctl
+-rw------- 1 tibero dba 22822912 Oct  6 11:07 /tibero/tbdata/tibero/c1.ctl
+-rw------- 1 tibero dba 22822912 Oct  6 11:07 /tibero/tbdata/tibero/c2.ctl
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ rm /tibero/tbdata/tibero/*.ctl
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/tbdata/tibero/.passwd
+-r-------- 1 tibero dba 24 Sep 27 16:55 /tibero/tbdata/tibero/.passwd
+[tibero@T1:/]$
+[tibero@T1:/]$ rm /tibero/tbdata/tibero/.passwd
+rm: remove write-protected regular file ‘/tibero/tbdata/tibero/.passwd’?
+[tibero@T1:/]$
+[tibero@T1:/]$ rm -rf /tibero/tbdata/tibero/.passwd
+[tibero@T1:/]$
+[tibero@T1:/]$ ls -al /tibero/tibero6/config/tibero.tip
+-rw-r--r-- 1 tibero dba 255 Sep 27 16:21 /tibero/tibero6/config/tibero.tip
+[tibero@T1:/]$
+[tibero@T1:/]$ rm /tibero/tibero6/config/tibero.tip
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ cp /tibero/s/backup_off_1014/*.dtf    /tibero/tbdata/tibero
+[tibero@T1:/]$ cp /tibero/s/backup_off_1014/log*.log   /tibero/tbdata/tibero
+[tibero@T1:/]$ cp /tibero/s/backup_off_1014/log-*.arc  /tibero/tbdata/tibero/arch
+[tibero@T1:/]$
+[tibero@T1:/]$ cp /tibero/s/backup_off_1014/*.ctl    /tibero/tbdata/tibero
+[tibero@T1:/]$ cp /tibero/s/backup_off_1014/.passwd    /tibero/tbdata/tibero
+[tibero@T1:/]$ cp /tibero/s/backup_off_1014/*.tip    /tibero/tibero6/config
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$
+[tibero@T1:/]$ tbboot
+Listener port = 8629
+</code></pre><h3 id="6b772d18-d6c2-4ea0-a503-44f323fc7194" class="">##controlfile만 백업 (online상태)</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ab559fbb-a527-4558-b3e6-219277e1038e" class="code"><code class="language-SQL">[tibero@T1:/]$ mkdir /tibero/s/backup_on_1124
+[tibero@T1:/]$
+[tibero@T1:/]$ tbsql sys/tibero
+
+tbSQL 6
+
+TmaxData Corporation Copyright (c) 2008-. All rights reserved.
+
+Connected to Tibero.
+
+SQL&gt; ALTER DATABASE BACKUP CONTROLFILE TO TRACE AS &#x27;/tibero/s/backup_on_1124/crectl.sql&#x27; REUSE NORESETLOGS;
+
+Database altered.
+
+SQL&gt;
+SQL&gt; !ls -al /tibero/s/backup_on_1124/crectl.sql
+-rwxrwx--- 1 root vboxsf 835 Oct  6 11:26 /tibero/s/backup_on_1124/crectl.sql
+SQL&gt;
+SQL&gt; !cat /tibero/s/backup_on_1124/crectl.sql
+CREATE CONTROLFILE REUSE DATABASE &quot;tibero&quot;
+LOGFILE
+ GROUP 0 &#x27;/tibero/tbdata/tibero/log01.log&#x27; SIZE 50M,
+ GROUP 1 &#x27;/tibero/tbdata/tibero/log11.log&#x27; SIZE 50M,
+ GROUP 2 &#x27;/tibero/tbdata/tibero/log21.log&#x27; SIZE 50M
+NORESETLOGS
+DATAFILE
+        &#x27;/tibero/tbdata/tibero/system001.dtf&#x27;,
+        &#x27;/tibero/tbdata/tibero/undo001.dtf&#x27;,
+        &#x27;/tibero/tbdata/tibero/usr001.dtf&#x27;,
+        &#x27;/tibero/tbdata/tibero/syssub001.dtf&#x27;
+ARCHIVELOG
+MAXLOGFILES 100
+MAXLOGMEMBERS 8
+MAXDATAFILES 256
+MAXARCHIVELOG 500
+MAXBACKUPSET 500
+MAXLOGHISTORY 500
+CHARACTER SET MSWIN949
+NATIONAL CHARACTER SET UTF16
+;
+
+---- Recovery is required in MOUNT mode.
+--ALTER DATABASE RECOVER AUTOMATIC;
+
+--ALTER DATABASE OPEN ;
+
+
+---- Adding Tempfiles is required in OPEN mode.
+-- ALTER TABLESPACE TEMP ADD TEMPFILE &#x27;/tibero/tbdata/tibero/temp001.dtf&#x27;
+--    SIZE 100M REUSE AUTOEXTEND ON NEXT 64M MAXSIZE 3G;</code></pre><p id="b4c69b21-eeab-49a8-b4e3-f45b411c2ee1" class="">
+</p><ul id="c25ad147-fa89-409b-a7e2-92e6babeac87" class="bulleted-list"><li style="list-style-type:disc">controlfile이 삭제되었을때 tbdown abnormal 후 tbboot시도하려면?</li></ul><p id="afe159c9-0382-4338-8890-11afc494ab63" class="">→ nomount 모드가 됨</p><p id="ebbb7217-d2d0-4d57-a184-47f83b7056d3" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a6a6f1b1-7d6e-44f9-bac5-321c496457d8" class="code"><code class="language-SQL">DESC DBA DATA_FILES;</code></pre><p id="5beffb4f-ef90-4528-98c6-680c27a66db1" class="">→ dba_data_files의 칼럼이름 출력</p><p id="970c0220-9174-4dd1-9823-6ebf1fb8ee2e" class="">
+</p><ul id="22622b44-13c2-4139-b69b-a0d6a18b75ed" class="bulleted-list"><li style="list-style-type:disc">데이터파일의 경로와 이름 확인</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="056253d2-f26d-42b5-8c93-e290cb7817e7" class="code"><code class="language-SQL">select tablespace_name, file_name from dba_data_file;</code></pre><p id="9f1a5b6d-1eea-4baa-81bf-24254e85d254" class="">
+</p><ul id="728452cb-70bd-4177-a827-0c4cb004b727" class="bulleted-list"><li style="list-style-type:disc">온라인 백업시작 </li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e66f7216-9e67-481a-b98b-71c2620cecde" class="code"><code class="language-SQL">alter tablespace system begin backup;</code></pre><ul id="a7e9c982-cbcc-4954-83b9-b963c5309825" class="bulleted-list"><li style="list-style-type:disc">해당 테이블스페이스의 데이터 파일 복사</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6d95817e-0fe5-489d-97ca-11e23594b27a" class="code"><code class="language-SQL">!cp /tbdata/tibero/user001.dtf /tibero/s/backup_0254</code></pre><ul id="751133a7-9a0d-4e1b-89f6-de8a6219b811" class="bulleted-list"><li style="list-style-type:disc">온라인 백업 종료</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6a3d9cd0-74db-4944-b379-b0b5ddd4a4a9" class="code"><code class="language-SQL">alter tablespace system end backup;</code></pre><ul id="3eb3e839-634f-4447-aaa5-7d614136a6ce" class="bulleted-list"><li style="list-style-type:disc">0번 file이 어떤 tablespace와 연결되어있는지<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b599afab-5643-4c63-8120-1bd95f716fe2" class="code"><code class="language-SQL">desc v$tablespace;
+select ts# from v$datafiles where file#=0; </code></pre><p id="be328400-7897-478b-8b28-82d83e36812e" class="">
+</p><p id="2adaa4ac-946c-493a-b06f-cb08e9a48944" class="">0번 tablespace의 이름</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e7e351c4-236e-4355-8d2b-5e6eedcfd87a" class="code"><code class="language-SQL">select name from v$tablespace where ts#=0; </code></pre><p id="f62d7504-99d0-48ab-ba60-190589f52983" class="">
+</p><p id="6cfa1531-f02f-4b57-b9e8-c9e58e1eb341" class="">[시험안내]</p><p id="1cd28a14-86f1-4fcb-af98-be70d901a2ec" class="">1교시</p><p id="25672486-4441-4097-b8d3-13cd061399cc" class="">실습하지 않은 내용들도 포함</p><p id="fbee7564-4fad-4858-b13a-4b4feb0c4eed" class="">tibero database link</p><p id="9823700f-8799-43ff-bbe5-eaf4de8e1f0e" class="">tibero tool-여러 object 뽑아서 </p><p id="831181b5-bf7a-411d-a1de-cda78a98386a" class="">
+</p><p id="79a88bee-4dca-4ebc-a49d-3e2f86cdfd69" class="">2교시</p><p id="6dfa7c76-9786-4027-a8c2-4ea65d69d54b" class="">[migration]</p><p id="8cce5bf6-5d6b-40f5-9dad-13a46977a8bb" class="">export/import/loader → 추출 </p><p id="4855c880-450b-4e1d-b99a-f03d1a18a04b" class="">백업 복구 용도 - 손상된 table </p><p id="f54d926d-b655-4976-80be-d1866acdbef3" class="">a db에서 b bd로 옮기는 작업</p><p id="7035b37e-8050-457f-a55a-54436d8fab47" class="">
+</p><p id="6a0c7feb-2f92-4907-ae55-0797468fed4d" class="">고정된 자리에 data있는 경우</p><p id="f5c72247-a347-453f-842e-b11b9b30d9ed" class="">필드가 구분되는 경우  </p><p id="57e75f82-a3c6-4b43-99a7-77c052b356e5" class="">세개의 데이터가 실패되는 경우</p><p id="5f5599b4-2d56-4860-87f8-17da5a84c7a1" class="">
+</p><p id="e894c85b-8e5d-40cc-bd84-513ff8b9b0ae" class="">3교시</p><p id="81f7976f-b60e-4efb-8d0d-19e1d9ac9bb3" class="">백업</p><p id="3b414ec9-0a1d-4de2-a650-a4eeba869394" class="">
+</p><p id="e0f275dd-4f8b-433a-92f7-a77482edf739" class="">[접속]</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="743bbca1-516d-4955-95f5-42221de4f271" class="code"><code class="language-SQL">[tibero@T1:/]$ vi /tibero/tibero6/client/config tbdsn.tbr
+2 files to edit
+[tibero@T1:/]$ vi /tibero/tibero6/client/config/tbdsn.tbr
+[tibero@T1:/]$ tbsql edu/edu@edu
+
+tbSQL 6
+
+TmaxData Corporation Copyright (c) 2008-. All rights reserved.
+
+Connected to Tibero using edu.
+
+SQL&gt; select * from a;
+
+        C1         C2
+---------- ----------
+         1          1
+
+1 row selected.
+
+SQL&gt;</code></pre></li></ul></div></details><p id="65fa01dd-0cf1-4ea6-b314-d17c393c57bb" class="">
+</p><h1 id="c331cc77-b9f2-4354-9d03-f85e9ec1696c" class="block-color-pink_background">[ Test ]</h1><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">Database Link</summary><div class="indented"><p id="56b90d48-f5a2-4c82-a8de-f4012131ae10" class="">
+</p><p id="24c76cb3-21c2-4bf9-9f93-fc2949ac0aba" class="block-color-gray_background">Tibero Online Manual 7.4 데이터베이스링크</p><p id="89fa011c-f9c2-4287-a8bc-67ef2913f42d" class="">
+</p><ul id="d4fbcab5-497a-406b-973a-6f42a2e816ae" class="bulleted-list"><li style="list-style-type:disc">Public DB Link</li></ul><p id="cf530f57-70af-44c1-8d29-b49d061dddb9" class="">→ using 절 이후의 ‘remote_2’는 연결할 데이터베이스 가리키는 이름 tbdsn.tbr에 해당 데이터베이스 정보가 저장되어 있어야한다. (link명 public_tibero)</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e28e7724-9e49-47b1-8763-f75770fd3ea6" class="code"><code class="language-SQL">create public database link public_tibero using &#x27;remote_2&#x27;;</code></pre><p id="6bda2a20-bbcb-4f51-b530-828b75b8ea46" class="">→ public db link 제거</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0e8f4a96-87dd-46b9-8dcc-72e9e1deb138" class="code"><code class="language-SQL">drop public database link public_tibero;</code></pre><p id="bc8cf490-c60f-40df-8d63-c6524e6874dc" class="">
+</p><ul id="bdb12bed-c5e6-4869-a2d7-85437707290d" class="bulleted-list"><li style="list-style-type:disc">Private DB Link</li></ul><p id="60d91b99-9ba5-4419-a777-d25e95918280" class="">→ 데이터베이스 링크를 생성한 사용자만 데이터베이스링크 사용</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="49926fc0-5773-4dd8-b8cf-a018ccbc7f57" class="code"><code class="language-SQL">create database link remote_tibero using &#x27;remote_1&#x27;;
+drop database link remote_tibero;</code></pre><p id="aafa04a1-0f48-4b9f-9c9a-750eda4a1d75" class="">
+</p><ul id="56912d28-375a-477c-8c9b-ee46bfc7e523" class="bulleted-list"><li style="list-style-type:disc">원격 데이터베이스에 연결</li></ul><p id="8eb167ef-8b5e-4418-b23e-4e915ac997b2" class="">→ 지정한 계정(user_1)을 이용하는 데이터베이스 링크의 생성</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="56894797-240a-4e91-98de-be22c30eb3b2" class="code"><code class="language-SQL">create database link remote_tibero connect to user1
+identified by &#x27;password&#x27; using &#x27;remote_1&#x27;;</code></pre><p id="fb17bdb3-a272-4e7e-837f-57a1d0d09af6" class="">→ 현재 연결된 계정을 이용하는 데이터베이스 링크의 생성</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e9c1e15-d0f4-41fb-a6d4-eba8e586f4fd" class="code"><code class="language-SQL">create database link remote_tibero using &#x27;remote_1&#x27;;</code></pre><p id="3cc4735e-f3a7-4251-83da-7237ab4eb898" class="">
+</p><ul id="62de5439-38a4-4a11-bfa7-44511278813a" class="bulleted-list"><li style="list-style-type:disc">게이트웨이</li></ul><ol type="1" id="1bf55b20-75f1-42d5-a945-e59f3cb694ff" class="numbered-list" start="1"><li>멀티 스레드 서버 방식 (listener 방식)</li></ol><p id="b19624c9-249e-4dfa-9bd3-85a3f50abd6b" class="">  → Oracle</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f0dba3c8-679f-4168-b17f-05183d364999" class="code"><code class="language-SQL">ora_link_remote=(
+                 (GATEWAY=(LISTENER=(HOST=12.34.56.78)
+                                    (PORT=9999))
+                          (TARGET=orcl)
+                          (TX_MODE=GLOBAL))
+)</code></pre><p id="211c0540-49a6-40aa-a4dc-286da331676f" class="">→ ora_link_remote (=create database link에서의 using절에 사용되는 이름)</p><p id="112c603b-ced5-4922-a9e0-386f7a08cfc3" class="">
+</p><ul id="0d2607a3-5c6e-46a8-8e36-071497f3d5d8" class="bulleted-list"><li style="list-style-type:disc">실행 및 종료</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="78b1c965-76f5-4e7c-b862-04ba47341dcc" class="code"><code class="language-SQL">gw4orcl
+tbgw</code></pre><p id="0ab6398f-e1ac-4805-97fc-a556b8813e5c" class="">
+</p><h2 id="ef4b7070-1511-4c45-8a01-79a3f107e4e1" class="">Tibero 와 Oracle 연결</h2><p id="dd3665c5-46a4-425e-b3b0-493a1963ae27" class="">→ Tibero Gateway DBLINK 구성</p><ol type="1" id="1cdf97e6-a6d4-4ab8-8390-05370887923c" class="numbered-list" start="1"><li>게이트웨이 파일 복사 </li></ol><ul id="ae3e91d2-4ca3-4190-af98-3f4631cffaee" class="bulleted-list"><li style="list-style-type:disc">파일 경로 : $TB_HOME/client/bin</li></ul><ol type="1" id="154416b4-a33d-4fcb-b49b-c1cf8785425d" class="numbered-list" start="2"><li>Tibero 설치된 계쩡에서 .profile에 oracle client library 사용과 관련된 내용을 밑에 추가</li></ol><ol type="1" id="f839c88b-cb34-406d-8959-47a325b981b5" class="numbered-list" start="3"><li>Tibero server에서 oracle server에 접근하기 위해 아래와 같이 tnsnames.ora 만든다.</li></ol></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">Tibero Tools</summary><div class="indented"><p id="42612d02-7d87-4bd5-9a05-029360653f30" class="">tbexport/tbimport/tbloader 순서</p><p id="e6f39a2a-4b38-4368-8db4-4e35ce8c8caf" class="">
+</p><ul id="1703d8ad-fe53-4b15-9698-d02c00926a5e" class="bulleted-list"><li style="list-style-type:disc">table 생성</li></ul><p id="41f8a31a-16d8-4926-bc88-7a0334136305" class="">tbsql tibero/tmax</p><p id="8a7190da-a0f4-4697-95e4-7c985840fe1f" class="">create table edu(c1 number, c2 varchar(10));</p><p id="a71fd310-672e-460c-8b6b-e76a8568f68a" class="">insert into edu values(1, ‘TIBERO’);</p><p id="8595c50c-ef0a-4b65-8f30-3309f8fb5422" class="">insert into edu values(2, ‘TMAX’);</p><p id="83274da2-bb11-4141-a9fe-ee7803c6c65a" class="">commit;</p><p id="f171c313-d146-438f-a6d2-ddb993ef897a" class="">select * from edu;</p><p id="6d2ff3e7-6f47-4813-896c-20b171d1a9be" class="">q</p><p id="d887faee-4fbf-45eb-a7dc-2301fa6ee919" class="">
+</p><ul id="206196da-cecc-4fa4-93c2-fc5b704d0b52" class="bulleted-list"><li style="list-style-type:disc">디렉토리 생성 후 tbexport </li></ul><p id="e0a6116b-3076-4e3e-923e-d499e40bacd5" class="">mkdir /tibero/expimp</p><p id="cf589f58-7ba0-43ea-b045-950f4de6c301" class="">tbexport username=sys password=tibero ip=192.168.56.241 port=8629 file=exp_data.dat log exp_data.log full=y script=y sid=tibero</p><p id="16e1472c-c5a6-414e-b495-6916369074c9" class="">
+</p><ul id="a184d13a-7003-4c39-812c-acfd64bb6b99" class="bulleted-list"><li style="list-style-type:disc">table drop후 tbimport</li></ul><p id="c339eee7-1f9b-4760-978c-8faab401c515" class="">tbsql tibero/tmax</p><p id="ed012821-a3fc-49b6-bf02-ff4d341bd20e" class="">drop table edu;</p><p id="88f55aaf-0c3b-4b5a-bd23-81fbf0e22f6f" class="">select * from edu;</p><p id="59ceeb3b-9e19-4ff2-b979-365291b1aa5e" class="">q</p><p id="33b8b180-55d9-4060-b80f-2017a52c7bea" class="">
+</p><p id="2857731e-8231-46ea-863f-ed12610709b3" class="">tbimport username=sys password=tibero ip=192.168.56.241 port=8629 file=exp_data.dat log exp_data.log full=y script=y sid=tibero <mark class="highlight-yellow_background">table=tibero.edu</mark></p><p id="751bcb85-f452-4a32-a602-070942a430be" class="">
+</p><ul id="0feeef78-7892-429b-ba4b-65b37c161b88" class="bulleted-list"><li style="list-style-type:disc">table 생성되었는지 확인</li></ul><p id="b5d575ca-a1dc-4081-884c-01c07469b953" class="">tbsql tibero/tmax</p><p id="3536b555-73e1-4e66-bed5-e5f750ba24c0" class="">select * from edu; </p><p id="aebdc8eb-4bb9-40f4-a773-dc05e2393ad9" class="">→ 테이블 생성됨</p><p id="5e67b767-0433-4a1c-87c1-5ccdc628edc7" class="">
+</p><ul id="106daeeb-2b24-41b6-b983-175c6f6cb43b" class="bulleted-list"><li style="list-style-type:disc">table은 있고 안에 data만 지운후 tbimport</li></ul><p id="5d64bbad-3816-41fa-a1d6-8a646eb5352b" class="">delete from edu;</p><p id="96fcbcde-4cf0-4f34-bf86-893582e500cf" class="">commit;</p><p id="ea9d65db-d81e-4c8f-9b54-8c97a1be19ac" class="">#오류 무시</p><p id="9de0c983-6e56-480a-af75-4a7abe3c9bb5" class="">tbimport username=sys password=tibero ip=192.168.56.241 port=8629 file=exp_data.dat log exp_data.log full=y script=y sid=tibero table=tibero.edu <mark class="highlight-yellow_background">ignore=y</mark></p><p id="bd522ab8-f3df-4c36-80fe-041b99be0819" class="">
+</p><ul id="f0df5f0c-5c07-4535-8397-84260cf62209" class="bulleted-list"><li style="list-style-type:disc">테이블 생성되었는지 확인</li></ul><p id="31c3913f-8605-4feb-a02a-865789a5d53e" class="">tbsql tibero/tmax</p><p id="a3ad5ea4-1ec8-434b-8e2b-f922906fcc5f" class="">select * from edu;</p><p id="3c124811-1985-4289-a089-ce36fa3e4d10" class="">
+</p><ul id="d8339df7-d013-41a9-bed0-f8594916ef7e" class="bulleted-list"><li style="list-style-type:disc">tibero1에 테이블 tbimport</li></ul><p id="721e89e9-4a35-4cc6-b453-02bcec9bb45f" class="">tbimport username=sys password=tibero ip=192.168.56.241 port=8629 file=exp_data.dat log exp_data.log full=y script=y sid=tibero <mark class="highlight-yellow_background">table=edu</mark> ignore=y <mark class="highlight-yellow_background">fromuser=tibero touser=tibero1</mark></p><p id="b723f2a4-a927-47ed-855e-8bc729dd54d3" class="">
+</p><p id="47183a81-d04b-40f9-8c8c-288e155def64" class="">tbsql tibero1/tmax</p><p id="51d12c75-b8c4-4eae-a3d5-12911968f10d" class="">select * from edu;</p><p id="05e3031b-b1b4-4be7-96d4-188ecfa0d432" class="">
+</p><ul id="085a6df6-b9a9-4ba0-843e-e6b1a593e40b" class="bulleted-list"><li style="list-style-type:disc">tbloader</li></ul><ul id="9844264b-b2bb-4c91-b9d9-11f818f31143" class="bulleted-list"><li style="list-style-type:disc">loader할 디렉토리 생성</li></ul><p id="51d022a1-57df-4b67-9771-62a32226c646" class="">mkdir loader</p><p id="4e8704ff-f647-42a7-a833-2faadc29d323" class="">cd loader</p><p id="054c4b04-2732-4b2a-b71d-f516cf24b5f0" class="">
+</p><ul id="64495faf-ad78-48d6-a8c3-b973a6acad0f" class="bulleted-list"><li style="list-style-type:disc">table 생성</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ded69113-6c66-44bb-9856-ec1e4f868dbe" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">CREATE TABLE MEMBER
+(
+    ID        NUMBER(4) NOT NULL,
+    NAME      VARCHAR2(10),
+    JOB       VARCHAR2(9),
+    BIRTHDATE DATE,
+    CITY      VARCHAR2(10),
+    PICTURE   BLOB,
+    AGE       NUMBER(3),
+    RESUME    CLOB
+);
+
+CREATE TABLE CLUB
+(
+    ID       NUMBER(6) NOT NULL,
+    NAME     VARCHAR2(10),
+    MASTERID NUMBER(4)
+);</code></pre><p id="699722f7-5d49-4877-9b5e-95cf829140d4" class="">&lt;control.ctl 파일 생성&gt;</p><p id="9456fc92-2a38-4912-8267-df46b3092e8b" class="">vi control.ctl</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="90bd1563-1e3b-42f7-b92a-1e7545070162" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">LOAD DATA
+INFILE &#x27;./data.dat&#x27;
+APPEND
+INTO TABLE club
+FIELDS TERMINATED BY &#x27;,&#x27;
+       OPTIONALLY ENCLOSED BY &#x27;&quot;&#x27;
+LINES TERMINATED BY &#x27;|\n&#x27;
+IGNORE 1 LINES
+(
+ id integer external,
+ name,
+ masterid integer external
+)</code></pre><p id="786df3c5-3231-42a5-8d4c-1c5f7158ee43" class="">&lt;data.dat 파일 생성&gt;</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="48c531d1-8141-4c23-aed3-d506e6467882" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">id     name      masterid|
+111111,FC-SNIFER,2345|
+dkkkkkkkkkk|
+111112,&quot;DOCTOR CLUBE ZZANG&quot;,2222|
+111113,&quot;ARTLOVE&quot;,3333|
+111114,FINANCE,1235|
+111115,&quot;DANCE MANIA&quot;,2456|
+111116,&quot;MUHANZILZU&quot;,2378|
+111117,&quot;INT&#x27;L&quot;,5555</code></pre><ul id="c060fef1-1715-4e20-8c63-65315fd36124" class="bulleted-list"><li style="list-style-type:disc">tbloader 유틸리티 실행 (로그파일 &amp; 오류파일)</li></ul><p id="bf92287c-0627-4e86-b262-5a1ed3bdd5ea" class="">tbloader userid=tibero/tmax@tibero control=./control.ctl</p><p id="fe4b899e-908b-4ab7-84e4-6e72487e341e" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">Tibero_Backup_Recovery</summary><div class="indented"><h2 id="c2dfedaf-deaf-4301-be4d-c98da18ed6ce" class="">[이론]</h2><ul id="d63bf8bb-a2e2-412b-aa90-1e437964616b" class="bulleted-list"><li style="list-style-type:disc">redo 저장시 일어나는 일들 (순서)</li></ul><p id="4a489ec0-bd44-4ff9-884d-89671a024a03" class="">→ redolog file안에 redolog 존재</p><p id="38034055-fb26-4522-aa34-ef90dc2c7336" class="">→ redolog는 어떤 data가 언제, 어떻게 (모든 변경내역 있는 파일)</p><p id="0c2fd687-0212-4292-9199-7a7b17593147" class="">→ data &lt; datablock &lt;datafile → datablock을 memory에 불러와 쓰거나 수정한다.</p><p id="d9031cd8-710a-4969-b85d-1842b5bb9bb8" class="">→ redolog file ↔ datafile은 다름</p><p id="a7258a91-fce8-4e37-854f-0127a1541c99" class="">→ archive 작업은 redolog file을 achive file에 복사하는 것</p><p id="95a4dd1e-b2d6-4abf-9d56-2aedf14ebb51" class="">
+</p><ul id="1443cfdd-5ac3-45e9-bdd9-965d06374733" class="bulleted-list"><li style="list-style-type:disc">database(controlfile, redolog file, datafile) 동기화 방식</li></ul><ol type="1" id="06873803-f394-4e3d-af5e-c51a24b3c741" class="numbered-list" start="1"><li>TSN (file 언제 발생, 언제 수정? 을 구분해줌)<p id="80a402af-f36b-4170-83ec-87492d254178" class=""> : 처음은 0 → transaction +1증가 → db내의 모든 작업들에 TSN 모두 부여</p></li></ol><ol type="1" id="38eca5e1-8b99-41f0-8def-23f2c558671b" class="numbered-list" start="2"><li>Checkpoint 발생 상황<p id="97e8fc99-092d-4dcc-887f-ded3774d9592" class="">→ 모든 로그 스위치 발생시 </p><p id="d93d8ca9-7623-4751-ad99-4a23b2715385" class="">→ 인스턴스가 normal, post_tx, immediate 옵션으로 종료</p><p id="dd978122-3f63-4e1e-ba0e-90d96f02a3b6" class="">→ 사용자가 수동으로 alter system checkpoint (sql)</p></li></ol><p id="5d66ff3e-de78-4e3a-a1cb-1b8c20a64c05" class="">
+</p><ul id="5b1d5e20-0c1e-41fe-ac4d-5336216893aa" class="bulleted-list"><li style="list-style-type:disc">백업종류</li></ul><ol type="1" id="d582636a-f2f9-409b-9179-d1f5aa48d0cd" class="numbered-list" start="1"><li>논리적인 백업</li></ol><p id="98078277-3c89-4494-b994-dd509f00110d" class="">→ 데이터베이스의 논리적인 단위 백업 (export tool 사용)</p><ol type="1" id="3d8c7dd3-50a5-4d71-9b10-3f745a254e12" class="numbered-list" start="2"><li>물리적인 백업</li></ol><p id="d653e4f2-789f-4c95-a1ea-297bb1f3e7df" class="">→ 데이터베이스를 구성하는 파일을 운영체제 레벨에서 copy 명령으로 백업</p><p id="628f192e-943d-4fbf-a5f2-dd8e3f707483" class="">(datafile, controlfile, archive logfile)</p><p id="e7d0e76c-0cb3-492c-b798-43efef8df963" class="">
+</p><ol type="1" id="c5f7f5a6-c90e-482f-a31d-b95cb981564f" class="numbered-list" start="1"><li>noarchivelog mode에서의 백업 (offline/cold)</li></ol><p id="4ac3e405-ba6b-4e2c-b6ba-4c991d0e1d0f" class="">→ 데이터베이스를 구성하는 전체 파일에 대해 운영을 멈춘 상태에서 백업</p><p id="f0b2964c-c9da-48a0-9c3a-7cf7e6546ebb" class="">→ 데이터베이스를 백업받은 시점으로의 복구만 가능</p><ol type="1" id="d056347b-44d4-444c-914e-628293e10c97" class="numbered-list" start="2"><li>archivelog mode에서의 백업 (online/hot)</li></ol><p id="1f92d49a-4c1a-40ec-b4f7-0d2d7fef7156" class="">→ 운영중에도 백업 가능</p><p id="cf40c5b4-cb6a-43e2-b716-a8258ea8ff5b" class="">→ controlfile 생성문, datafile, archive logfile 백업</p><p id="a8886174-f6f3-4808-913a-ea90037aa945" class="">→ 백업된 archive logfile의 시점에 따라 datafile 백업 시점 이전도 복구 가능</p><p id="cbb75bc1-c9cd-4078-973b-a432176e5ec7" class="">
+</p><h2 id="ead6cc8c-55ea-49a0-bab7-ded2f9036e09" class="">[실습]</h2><ul id="f39ca67e-78dc-4104-97f2-8148338d427a" class="bulleted-list"><li style="list-style-type:disc">controlfile(v$controlfile) 백업<ul id="d2a47a0e-4379-4aed-a692-13eeea34b62a" class="bulleted-list"><li style="list-style-type:circle">다중화</li></ul><p id="dd327378-b945-40bd-9de3-a026be804e70" class="">→ tbdown → controlfile 다른 위치로 copy → $TB_SID.tip에 parameter추가 → tbboot</p><ul id="0ae8c545-5c99-41f5-94da-92f5b9fa5bd1" class="bulleted-list"><li style="list-style-type:circle">offline backup - copy 명령어를 통해 별도의 위치 copy</li></ul><p id="d0264a63-4b1d-4203-8681-36478ac04eb1" class="">→ tibero 정상 종료한 후 OS의 copy 명령어를 통해 datafile, logfile, controlfile, tip file 백업</p><p id="b2dc9e59-063d-45b3-bf1a-c517f0606cab" class="">→ mount, open 모드에서 백업할 파일 정보 조회</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0191b2a5-d665-4e34-a8f3-c052caa657b8" class="code"><code class="language-SQL">tbdown immediate
+tbboot
+tbsql sys/tibero</code></pre><p id="1a1b1bbd-93b1-40a2-91cd-e9cc57050f5b" class="">## tibero가 정상상태인지 확인</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="18cf7025-fa29-4311-ac23-acfd8153410d" class="code"><code class="language-SQL">SELECT NAME FROM V$DATABASE;
+SELECT USERNAME FROM DBA_USERS;</code></pre><p id="b7b31bd0-0955-4f02-a2d9-c5c949647891" class="">## datafile 조회</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b1c05649-2a8c-43fe-ad6f-73013655e328" class="code"><code class="language-SQL">SELECT NAME FROM V$DATAFILE;
+SELECT FILE_NAME FROM DBA_DATA_FILES;</code></pre><p id="2f2d26c9-0031-4ce9-a946-04291ca40f0c" class="">##logfile 조회</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4378206d-49fa-47f6-a07d-bdb2305f9ade" class="code"><code class="language-SQL">SELECT MEMBER FROM V$LOGFILE;</code></pre><p id="54918290-858a-43ec-b151-83721f64c07f" class="">##현재 archivelog file 상태 확인</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7baa36f6-42fd-426d-b15b-fcb2f10aed29" class="code"><code class="language-SQL">SELECT LOG_MODE FROM V$DATABASE;</code></pre><p id="0803461c-f553-4e4e-8195-55c68e6ce48b" class="">##noarchive→archive로 변경</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b999b1e4-575c-4c4d-87f6-03a2a71f063f" class="code"><code class="language-SQL">SELECT NAME FROM V$ARCHIVE_DEST_FILES;
+tbdown immediate
+tbboot mount  #mount 모드에서 변경해야됨
+
+tbsql sys/tibero
+SQL&gt; ALTER DATABASE ARCHIVELOG;
+
+Database altered.
+
+SQL&gt; QUIT
+Disconnected.
+
+tbdown
+tbboot
+
+tbsql sys/tibero
+SELECT LOG_MODE FROM V$DATABASE;
+
+ALTER SYSTEM SWITCH LOGFILE;</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="79eb9b4b-ba81-4d74-8970-55274968a3a0" class="code"><code class="language-SQL">alter database backup controlfile to trace as 백업경로 reuser noresetlogs;</code></pre><p id="13051d4d-bbb3-4d76-b221-4d8e7cd07111" class="">##archivelogfile 조회</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1b7b6a9f-a7d1-4f55-ae61-f88a332306c9" class="code"><code class="language-SQL">SELECT NAME FROM V$ARCHIVE_DEST_FILES;</code></pre><p id="bc846ffa-48d9-4598-9d20-f47e10754261" class="">##controlfile 조회 (백업대상 control 조회)</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6dc43de8-ff9f-4524-b521-6a7c91f5ae46" class="code"><code class="language-SQL">SELECT NAME FROM V$CONTROLFILE;</code></pre><p id="66aabc76-a64e-41dd-a5f4-0ab51bb78398" class="block-color-yellow_background">tibero 정상 종료 !!!!!! 후 copy 해야됨</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="10090d89-20c3-458e-80be-6220a9e2bd1b" class="code"><code class="language-SQL">tbdown (NORMAL MODE)
+
+ps -ef | grep tbsvr</code></pre><p id="e34f8f1b-accf-47c0-a2a9-e9e2a2211360" class="">##백업할 디렉토리 생성후 파일 copy</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c55994bc-6d00-4d7e-ad23-feab6e904b45" class="code"><code class="language-SQL">mkdir /tibero/s/backup_off_1014
+
+#data-&gt;log-&gt;archive-&gt;control 순으로 copy
+cp /tibero/tbdata/tibero/*.dtf  /tibero/s/backup_off_1014
+cp /tibero/tbdata/tibero/log*.log   /tibero/s/backup_off_1014
+cp /tibero/tbdata/tibero/arch/log-*.arc    /tibero/s/backup_off_1014
+cp /tibero/tbdata/tibero/*.ctl   /tibero/s/backup_off_1014
+ls -al /tibero/s/backup_off_1014
+
+#$TB_SID.tip 파일 copy
+ls -al $TB_HOME/config/$TB_SID.tip
+cp /tibero/tibero6/config/tibero.tip   /tibero/s/backup_off_1014
+
+#tibero.tip 파일 위치 출력
+cat /tibero/tibero6/config/tibero.tip | grep DB_CREATE_FILE_DEST
+
+#password 파일 copy
+ls -al /tibero/tbdata/tibero/.passwd
+cp /tibero/tbdata/tibero/.passwd   /tibero/s/backup_off_1014
+ls -al /tibero/s/backup_off_1014</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c54cc617-68b0-4b13-b4df-9729b0a85b8c" class="code"><code class="language-SQL">#tibero 재시동후 비정상 down
+tbboot
+tbdown abnormal
+
+#원래 file들 삭제
+ls -al /tibero/tbdata/tibero/*.dtf
+rm /tibero/tbdata/tibero/*.dtf
+rm /tibero/tbdata/tibero/log*.log
+rm /tibero/tbdata/tibero/arch/log-*.arc
+
+ls -al /tibero/tbdata/tibero/*.ctl
+rm /tibero/tbdata/tibero/*.ctl
+
+ls -al /tibero/tbdata/tibero/.passwd
+rm -rf /tibero/tbdata/tibero/.passwd
+
+rm /tibero/tibero6/config/tibero.tip
+
+#backup_off_1014에 backup해놓은 파일들 copy
+cp /tibero/s/backup_off_1014/*.dtf    /tibero/tbdata/tibero
+cp /tibero/s/backup_off_1014/log*.log   /tibero/tbdata/tibero
+cp /tibero/s/backup_off_1014/log-*.arc  /tibero/tbdata/tibero/arch
+cp /tibero/s/backup_off_1014/*.ctl    /tibero/tbdata/tibero
+cp /tibero/s/backup_off_1014/.passwd    /tibero/tbdata/tibero
+cp /tibero/s/backup_off_1014/*.tip    /tibero/tibero6/config</code></pre><p id="76fefda6-e8e7-4914-83e5-4dfd9893fcbc" class="">$TB_SID 파일의 control_files 항목 추가</p><p id="030e44a5-4190-42b8-9198-d145bfff9a00" class="">
+</p><ul id="852d6695-eb13-41e5-8fcf-5b3ef7baad5f" class="bulleted-list"><li style="list-style-type:circle">online backup</li></ul><p id="f0877652-878f-41ed-ba3e-78af2194720b" class="">→ controlfile 구문 생성됨</p><p id="c240d694-7dd0-4f15-800e-31082644380f" class="">##백업할 디렉토리 생성 후  controlfile 백업</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f8970f2e-c2bc-4b18-b6bb-b865a618e5ab" class="code"><code class="language-SQL">tbboot
+
+#s폴더 tibero가 관여x
+mkdir /tibero/s/backup_on_1124
+
+#백업
+tbsql sys/tibero
+ALTER DATABASE BACKUP CONTROLFILE TO TRACE AS &#x27;/tibero/s/backup_on/crectl.sql&#x27; REUSE NORESETLOGS;
+
+!ls -al /tibero/s/backup_on/crectl.sql
+!cat /tibero/s/backup_on/crectl.sql
+
+#원래 데이터 삭제
+SELECT NAME FROM V$CONTROLFILE;
+!rm /tibero/tbdata/tibero/c1.ctl
+!rm /tibero/tbdata/tibero/c2.ctl
+!ls -al /tibero/tbdata/tibero/*.ctl
+q
+
+#비정상 종료
+tbdown abnormal
+#인스턴스 종료 확인
+ps -ef | grep tbsvr
+tbboot nomount
+#NOMOUNT 모드
+
+#controlfile 없는 것 확인
+ls -al /tibero/tbdata/tibero/c1.ctl
+ls -al /tibero/tbdata/tibero/c2.ctl
+
+#controlfile 재생성
+tbsql sys/tibero
+@/tibero/s/backup_on/crectl.sql
+!ls -al /tibero/tbdata/tibero/c1.ctl
+!ls -al /tibero/tbdata/tibero/c2.ctl
+q
+
+#mount모드로 재기동
+tbdown
+tbboot mount
+
+#media recovery
+tbsql sys/tibero
+alter database recover automatic database;
+q
+
+#normal mode로 tibero 재기동
+tbdown
+tbboot (NORMAL MODE)
+
+##temp datafile 추가
+tbsql sys/tibero
+select file_id, tablespace_name from dba_temp_files;
+#0row
+
+##내용 controlfile 맨 밑 2줄
+ALTER TABLESPACE TEMP ADD TEMPFILE &#x27;/tibero/tbdata/tibero/temp001.dtf&#x27;
+ SIZE 100M REUSE AUTOEXTEND ON NEXT 64M MAXSIZE 3G;
+
+select file_id, tablespace_name from dba_temp_files;
+#1row
+q</code></pre><p id="16637621-405c-43a8-ad46-bc702a2d9d2c" class="">##datafile 백업</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e0d36695-9859-4f3a-b5d9-50e6b6e11810" class="code"><code class="language-SQL">mkdir /tibero/s/backup_on_0254
+tbdown
+tbboot (NORMAL MODE)
+
+tbsql sys/tibero
+DESC DBA_DATA_FILES;
+
+SELECT TABLESPACE_NAME, FILE_NAME FROM DBA_DATA_FILES;
+
+TABLESPACE_NAME
+--------------------------------------------------------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+SYSTEM
+/tibero/tbdata/tibero/system001.dtf
+
+UNDO
+/tibero/tbdata/tibero/undo001.dtf
+
+USR
+/tibero/tbdata/tibero/usr001.dtf
+
+SYSSUB
+/tibero/tbdata/tibero/syssub001.dtf
+
+SELECT NAME FROM V$TABLESPACE;
+
+#sysem tablespace
+#tablespace backup 모드로 변경
+ALTER TABLESPACE SYSTEM BEGIN BACKUP;
+#백업 경로로 copy
+!cp /tibero/tbdata/tibero/system001.dtf   /tibero/s/backup_on
+#backup모드 종료
+ALTER TABLESPACE SYSTEM END BACKUP;
+
+#undo
+ALTER TABLESPACE UNDO BEGIN BACKUP;
+!cp /tibero/tbdata/tibero/undo001.dtf   /tibero/s/backup_on_0254
+ALTER TABLESPACE UNDO END BACKUP;
+
+#usr
+ALTER TABLESPACE USR BEGIN BACKUP;
+!cp /tibero/tbdata/tibero/usr001.dtf   /tibero/s/backup_on_0254
+ALTER TABLESPACE USR END BACKUP;
+
+#syssub
+ALTER TABLESPACE SYSSUB BEGIN BACKUP;
+!cp /tibero/tbdata/tibero/syssub001.dtf   /tibero/s/backup_on_0254
+ALTER TABLESPACE SYSSUB END BACKUP;
+
+#logswitch 수행
+ALTER SYSTEM SWITCH LOGFILE;
+
+#controlfile 백업
+ALTER DATABASE BACKUP CONTROLFILE TO TRACE AS &#x27;/tibero/s/backup_on/crectl.sql&#x27; REUSE NORESETLOGS;
+
+#logfile 백업
+#logswitch 수행
+ALTER SYSTEM SWITCH LOGFILE;
+!cp /tibero/tbdata/tibero/arch/*.arc     /tibero/s/backup_on_0254
+
+#tibero.tip 백업
+!cp /tibero/tibero6/config/tibero.tip    /tibero/s/backup_on_0254
+
+#password 백업
+!cp /tibero/tbdata/tibero/.passwd        /tibero/s/backup_on_0254
+!ls -al /tibero/s/backup_on_0254</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="feee97a4-63fc-4d47-9e79-7400abdc0a8d" class="code"><code class="language-SQL">DESC DBA_DATA_FILES;
+DESC V$TABLESPACE;
+DESC V$DATAFILE;
+
+SELECT TS# FROM V$DATAFILE WHERE FILE#=0;
+SELECT NAME FROM V$TABLESPACE WHERE TS#=0;
+q
+
+tbdown
+tbboot</code></pre><p id="dd3b51f6-6352-458a-9430-e823205d521b" class="">##일부 datafile 손상</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="586dafe0-a0e2-4940-a001-5fe7eb481448" class="code"><code class="language-SQL">SELECT NAME FROM V$DATAFILE;
+!rm /tibero/tbdata/tibero/usr001.dtf
+q
+
+tbdown abnormal
+tbboot (warning: mount mode)
+
+#MOUNT MODE
+tbsql sys/tibero
+COL TIME FOR A10
+COL ERROR FOR A30
+
+#복구 필요한 file (기준: controlfile)
+SELECT * FROM V$RECOVER_FILE;
+
+#복구 필요한 파일 이름,경로
+SELECT NAME FROM V$DATAFILE WHERE FILE# = 2;
+!ls /tibero/tbdata/tibero/usr001.dtf
+
+#백업
+!cp /tibero/s/backup_on/system001.dtf      /tibero/tbdata/tibero/system001.dtf
+!ls /tibero/tbdata/tibero/usr001.dtf
+
+SELECT * FROM V$RECOVER_FILE;
+#CHANGE#은 backup했을 때 checkpoint
+#장애가 난 현시점이랑은 다름
+
+#복구명령(CHANGE# 갱신)
+ALTER DATABASE RECOVER AUTOMATIC DATABASE;
+
+COL TIME FOR A10
+COL ERROR FOR A30
+
+SELECT * FROM V$RECOVER_FILE;
+#0row (복구 필요x)
+
+tbdown
+tbboot</code></pre></li></ul><ul id="015f2663-b548-450d-9ea6-8e55db6d2285" class="bulleted-list"><li style="list-style-type:disc">redo logfile(v$log, v$logfile) 백업<ul id="8aec6613-8ae9-4689-8b48-821c41e5f965" class="bulleted-list"><li style="list-style-type:circle">다중화</li></ul><p id="85f015a7-f7ea-46d8-993a-c7afe067fd19" class="">→ log group 추가 </p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="029d5335-ea94-40db-9a18-311e9db0a464" class="code"><code class="language-SQL">ALTER DATABASE ADD LOGFILE
+GROUP 4 (
+(‘‘/home/ tbdata /redo41.log ’’, ‘‘/home/ tbdata /redo42.log ’’) SIZE</code></pre><p id="da0caad0-f8d3-48e7-89d9-7feee7eced37" class="">→ log member 추가</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5602fb6a-3fb2-4cd9-91b6-7a557416af46" class="code"><code class="language-SQL">ALTER DATABASE ADD LOGFILE MEMBER
+‘‘/home/ tbdata /redo43.log TO GROUP 4;</code></pre><p id="40086f34-c013-42f0-974a-b64eadf14d61" class="">
+</p><p id="977e853d-2a97-47fd-a804-b581bd217033" class="">
+</p></li></ul><ul id="8a9ffd2e-01d3-4fca-9923-93c8c56f3cf4" class="bulleted-list"><li style="list-style-type:disc">archive log 정보</li></ul><p id="a0ce2d70-2994-48ce-b140-3a9b8c1a696d" class="">→ v$archive_dest_files : log_archive_dest 내의 archive log files의 정보 표시 (현재)</p><p id="2bcef54b-86ea-466b-bcea-d83e5a067caa" class="">→ v$archive_log : archive log 정보 표시(log switch할 때 archive log file 만들어질 때 입력됨)</p><p id="2270f8c7-ef02-4f7a-91dd-f0740d0b7ea9" class="">
+</p></div></details><p id="4357115b-39bd-4096-80aa-407a6175c7bd" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
