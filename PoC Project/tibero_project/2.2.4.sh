@@ -1,0 +1,4 @@
+SET ECHO ON
+#SESSION 2#
+#--------------MVTEST TABLE의 DATA 변경 확인------------#
+SELECT * FROM TEST1.MVCTEST WHERE ID=1;

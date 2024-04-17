@@ -1,0 +1,12 @@
+SET ECHO ON
+#SESSION2#
+#---------------TEST2로 접속---------------#
+CONN TEST2/TEST2
+#---------------현재 시간 확인---------------#
+ALTER SESSION SET
+NLS_DATE_FORMAT='YYYY/MM/DD
+HH24:MI:SS';
+
+SELECT SYSDATE FROM DUAL;
+#---------------RXTEST TABLE의 DATE UPDATE---------------#
+UPDATE TEST1.RXTEST SET NAME ='TESTTESTTEST' WHERE ID = 1;

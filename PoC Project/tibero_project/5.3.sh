@@ -1,0 +1,90 @@
+SET ECHO ON
+#--------T1 TABLE 생성--------#
+CREATE TABLESPACE TS_TEST
+DATAFILE 'test001.dtf' SIZE 16M AUTOEXTEND ON NEXT 16M MAXSIZE 1G,
+'test002.dtf' SIZE 16M AUTOEXTEND ON NEXT 16M MAXSIZE 1G
+EXTENT MANAGEMENT LOCAL AUTOALLOCATE;
+
+CREATE TABLESPACE TS_TEST_IDX
+DATAFILE 'test_idx_001.dtf' SIZE 8M AUTOEXTEND ON NEXT 8M MAXSIZE 1G
+EXTENT MANAGEMENT LOCAL AUTOALLOCATE;
+CREATE USER TEST IDENTIFIED BY TEST DEFAULT TABLESPACE TS_TEST;
+GRANT DBA TO TEST;
+CONN TEST/TEST
+#--------T1 TABLE 생성--------#
+CREATE TABLE TEST.T1 (ID NUMBER,
+ANAME VARCHAR2(32),
+BNAME VARCHAR2(32),
+ID2 NUMBER)
+TABLESPACE TS_TEST;
+
+CREATE INDEX IDX_T1 ON T1(ID, ANAME) TABLESPACE TS_TEST_IDX;
+INSERT INTO TEST.T1
+SELECT ROWNUM,
+'A'||TO_CHAR(ROWNUM),
+'B'||TO_CHAR(ROWNUM),
+ROUND(ROWNUM/50)
+FROM DUAL CONNECT BY ROWNUM<=50000;
+
+SELECT COUNT(*) FROM TEST.T1;
+#--------BEGIN BACKUP 수행--------#
+ALTER DATABASE BEGIN BACKUP;
+#--------HOT BACKUP 진행(DATAFILE 복제)--------#
+!mkdir /tibero/s/tibero_hot2
+!cp /tibero/tbdata/tibero/  tibero_hot2/.
+!ls -al /tibero/s/tibero_hot2
+#--------END BACK UP 수행 및 LOG SWITCH 수행--------#
+ALTER DATABASE END BACKUP;
+ALTER SYSTEM SWITCH LOGFILE;
+#--------SYSDATE 조회--------#
+ALTER SESSION SET NLS_DATE_FORMAT='YYYY/MM/DD HH24:MI:SS';
+SELECT SYSDATE FROM DUAL;
+
+#--------DATA 입력 TABLE 건수 조회--------#
+INSERT INTO TEST.T1 (ID) VALUES ('444444');
+SELECT COUNT(*) FROM TEST.T1;
+
+#--------CONTROL FILE BACK UP 및 LOG SWITCH 수행--------#
+ALTER DATABASE BACKUP CONTROLFILE TO TRACE AS '/home/tibero/ctl.sql' reuse resetlogs;
+
+ALTER SYSTEM SWITCH LOGFILE;
+ALTER SYSTEM SWITCH LOGFILE;
+ALTER SYSTEM SWITCH LOGFILE;
+ALTER SYSTEM SWITCH LOGFILE;
+ALTER SYSTEM SWITCH LOGFILE;
+
+#--------TIBERO 종료 및 DATAFILE 전체 삭제(REDO LOG까지)--------#
+!tbdown
+!rm /tibero/tbdata/tibero/*.dtf
+!rm -rf /tibero/tbdata/tibero/redo*
+!rm /tibero/tbdata/tibero/*.ctl
+!ls -al /tibero/tbdata/tibero
+
+#--------TIBERO 기동하여 mount모드 및 장애 상황 확인--------#
+!tbboot
+!tbdown
+
+#--------TIBERO 종료 및 HOT BACKUP 원복(tbdown 정상 종료 후 backup)--------#
+!cp /tibero/s/tibero_hot2/*.dtf  /tibero/tbdata/tibero/.
+!ls -al /tibero/tbdata/tibero
+
+#--------nomount 기동 및 CONTROLFILE 복구--------#
+!tbboot nomount
+@/home/tibero/ctl.sql
+#--------TIBERO MOUNT모드 기동 및 복구 수행-------#
+!tbdown
+!tbboot mount
+
+ALTER SYSTEM SET NLS_DATE_FORMAT='YYYY/MM/DD HH24:MI:SS';
+ALTER DATABASE RECOVER AUTOMATIC DATABASE UNTIL TIME '2022/11/04 15:00:00';
+
+#--------TIBERO 종료->기동->복구 마무리(tempfile 생성)--------#
+!tbdown
+!tbboot resetlogs
+
+ALTER TABLESPACE TEMP ADD TEMPFILE 'TEMP001.DTF' SIZE 512M REUSE AUTOEXTEND ON NEXT 16M MAXSIZE 1024M;
+
+#--------T1 TABLE 건수 확인--------#
+SELECT COUNT(*) FROM TEST.T1;
+
+EXIT

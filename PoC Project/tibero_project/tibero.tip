@@ -1,0 +1,41 @@
+SET ECHO ON
+CREATE DATABASE
+USER sys IDENTIFIED BY tibero
+MAXDATAFILES 256
+CHARACTER SET UTF8
+NATIONAL CHARACTER SET UTF8
+LOGFILE
+	GROUP 0 (
+	'/tibero/tbdata/tibero/redo1/log01.log',
+	'/tibero/tbdata/tibero/redo2/log02.log') SIZE 25M,
+	GROUP 1 (
+	'/tibero/tbdata/tibero/redo1/log11.log',
+	'/tibero/tbdata/tibero/redo2/log12.log') SIZE 25M,
+	GROUP 2 (
+	'/tibero/tbdata/tibero/redo1/log21.log',
+	'/tibero/tbdata/tibero/redo2/log22.log') SIZE 25M,
+	GROUP 3 (
+	'/tibero/tbdata/tibero/redo1/log31.log',
+	'/tibero/tbdata/tibero/redo2/log32.log') SIZE 25M,
+	GROUP 4 (
+	'/tibero/tbdata/tibero/redo1/log41.log',
+	'/tibero/tbdata/tibero/redo2/log42.log') SIZE 25M
+MAXLOGFILES 100
+MAXLOGMEMBERS 2
+ARCHIVELOG
+	DATAFILE '/tibero/tbdata/tibero/system001.dtf' SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+DEFAULT TEMPORARY TABLESPACE TEMP
+	TEMPFILE '/tibero/tbdata/tibero/temp001.dtf' SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+	EXTENT MANAGEMENT LOCAL AUTOALLOCATE
+UNDO TABLESPACE UNDO
+	DATAFILE '/tibero/tbdata/tibero/undo001.dtf' SIZE 380M
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G
+	EXTENT MANAGEMENT LOCAL UNIFORM SIZE 128k
+DEFAULT TABLESPACE USR
+	DATAFILE '/tibero/tbdata/tibero/usr001.dtf' SIZE 100m
+	AUTOEXTEND ON NEXT 64m MAXSIZE 3G
+SYSSUB
+	DATAFILE '/tibero/tbdata/tibero/syssub001.dtf' SIZE 380m
+	AUTOEXTEND ON NEXT 64M MAXSIZE 3G ;

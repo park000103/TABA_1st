@@ -1,0 +1,84 @@
+SET ECHO ON
+#----------CONTROLFILE,LOGFILE,DATAFILE,TEMP_FILE 조회--------#
+SELECT NAME FROM V$CONTROLFILE;
+SELECT MEMBER FROM V$LOGFILE;
+SELECT FILE_NAME FROM DBA_DATAFILES;
+SELECT FILE_NAME FROM DBA_TEMP_FILES;
+#--------TABLESPACE 2개--------#
+CREATE TABLESPACE TS_TEST
+DATAFILE 'test001.dtf' SIZE 16M AUTOEXTEND ON NEXT 16M MAXSIZE 1G,
+'test002.dtf' SIZE 16M AUTOEXTEND ON NEXT 16M MAXSIZE 1G
+EXTENT MANAGEMENT LOCAL AUTOALLOCATE;
+
+CREATE TABLESPACE TS_TEST_IDX
+DATAFILE 'test_idx_001.dtf' SIZE 8M AUTOEXTEND ON NEXT 8M MAXSIZE 1G
+EXTENT MANAGEMENT LOCAL AUTOALLOCATE;
+CREATE USER TEST IDENTIFIED BY TEST DEFAULT TABLESPACE TS_TEST;
+GRANT DBA TO TEST;
+CONN TEST/TEST
+#--------T1 TABLE 생성--------#
+CREATE TABLE TEST.T1 (ID NUMBER,
+ANAME VARCHAR2(32),
+BNAME VARCHAR2(32),
+ID2 NUMBER)
+TABLESPACE TS_TEST;
+
+CREATE INDEX IDX_T1 ON T1(ID, ANAME) TABLESPACE TS_TEST_IDX;
+
+INSERT INTO TEST.T1
+SELECT ROWNUM ,
+ 'A'||TO_CHAR(ROWNUM),
+ 'B'||TO_CHAR(ROWNUM),
+ ROUND(ROWNUM/50)
+FROM DUAL CONNECT BY ROWNUM<=50000;
+
+COMMIT;
+
+SELECT COUNT(*) FROM TEST.T1;
+
+#--------TIBERO 종료 및 COLD BACK UP 실행--------#
+!tbdown
+!mkdir /tibero/s/tibero_bak
+!cp -r /tibero/tbdata/tibero  /tibero/s/tibero_bak
+!ls -al /tibero/s/tibero_bak/tibero
+
+#--------TIBERO 기동--------#
+!tbboot
+
+#--------DATA 입력-------#
+ INSERT INTO TEST.T1
+SELECT ROWNUM ,
+ 'A'||TO_CHAR(ROWNUM),
+ 'B'||TO_CHAR(ROWNUM),
+ ROUND(ROWNUM/50)
+FROM DUAL CONNECT BY ROWNUM<=50000; 
+
+COMMIT;
+
+SELECT COUNT(*) FROM TEST.T1;
+
+#--------TIBERO 종료 및 DATA FILE 전체 삭제--------#
+!rm /tibero/tbdata/tibero/*.dtf
+!ls -al /tibero/tbdata/tibero
+#-------TIBERO MOUNT MODE 및 장애 상황 확인--------#
+!tbboot
+#--------TIBERO 종료 및 COLD BACK UP 파일 원복--------#
+!tbdown
+!cp /tibero/s/tibero_bak/tibero/*.dtf  /tibero/tbdata/tibero/.
+!ls -al /tibero/tbdata/tibero
+#-------TIBERO MOUNT 모드 기동 및 복구 수행--------#
+!tbboot mount
+
+ALTER DATABASE RECOVER AUTOMATIC;
+#--------TIBERO 종료 및 TIBERO 기동--------#
+!tbdown
+!tbboot
+
+#--------TABLE 건수 조회--------#
+SELECT COUNT(*) FROM TEST.T1;
+
+EXIT
+
+
+
+
